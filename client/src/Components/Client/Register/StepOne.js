@@ -14,20 +14,16 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
     e.preventDefault();
 
         if(isFormInValidState.email && isFormInValidState.password && isFormInValidState.confirmPassword ){
-        incrementSteps();
+            incrementSteps();
          }
+         
     }
-
-
-
     const passwordNotSameErrorRef = useRef()//error message , span element
     const emailErrorRef = useRef();//error message, span element
     const passwordLengthErrorRef = useRef();//error message , span element
-
-    const passwordInputRef = useRef();//password input, input element
     
 
-
+    const passwordInputRef = useRef();//password input, input element
     function validateIfPasswordsAreSame(event){
         const confirmPasswordInput = event.target;
         if(passwordInputRef.current.value === confirmPasswordInput.value){
@@ -43,14 +39,13 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
             }))
         }
 
-        function changeElementAttributes_OVERIDE(outline, display){ // modified global function
+        function changeElementAttributes_OVERIDE(outline, display){ // modified global function, if password did not match
             passwordInputRef.current.style.outline = outline
             confirmPasswordInput.style.outline = outline
             passwordNotSameErrorRef.current.style.display = display
         }
     }
-
-   
+    
     function validatePasswordLength(event){
         const password = event.target.value;
         if(password.length >= 8){
@@ -67,6 +62,7 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
         }
       
     }
+
     function validateEmail(event){
         let email = event.target.value;
 
@@ -83,16 +79,26 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
             }))
         }
         function isValidEmail(email){
-            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(String(email).toLowerCase());
+            const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return emailRegex.test(String(email).toLowerCase());
         }
+
     }
     return (
         <div>
-             <div className="sign-up">        
+             <div className="sign-up">      
+
+            <ol className="steps">
+            <li className="stepOne active">1. Account</li>
+            <li className="stepTwo">2. Information</li>
+            <li className="stepThree">3. Confirmation</li>
+        </ol>  
             <div className="form-wrapper">
             <div className="form-title">
-                <span>Sign Up</span></div>
+                <span>Let's setup your user account details</span>
+               
+                </div>
+                
         <form className="form-form">
         <div className="input-wrapper">
             <label className="" htmlFor="email">Email</label>
@@ -135,7 +141,7 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
         <Link to="/Signup">Already have an account? Sign In</Link>
         </div>
         <div className="btn-wrapper">
-        <button type="submit" className="btn ok default-clr" onClick={proceed}>Next</button>
+        <button type="submit" className="btn bl-bg default-clr" onClick={proceed}>Next</button>
         </div>
         </form>
         </div>

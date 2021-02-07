@@ -2,11 +2,10 @@ const express = require('express');
 const router = express.Router();
 const provinces = require('philippines/provinces');
 const cities = require('philippines/cities');
-const cors = require('cors');
-const corsConfig = require('../corsConfig')
 
 
-router.get('/provinces/cities/:key',cors(corsConfig),(req,res)=>{
+
+router.get('/provinces/cities/:key',(req,res)=>{
     const key = req.params.key;
 
     let citiesFilteredByProvinceKey = cities.map(city=>city).filter(city=>city.province === key);
@@ -19,7 +18,7 @@ router.get('/provinces/cities/:key',cors(corsConfig),(req,res)=>{
 
 })
 
-router.get('/provinces',cors(corsConfig),(req,res)=>{
+router.get('/provinces',(req,res)=>{
    res.send(provinces);
 })
 

@@ -6,30 +6,32 @@ function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeEle
 
     const mobileNumberErrorRef = useRef();
     const [isValidMobileNumber,setValidMobileNumber]= useState(false);
+
     const [provinces,setProvinces] = useState([{
-        key:"NV",
-        name:"NOVALUE"
+        key:"",
+        name:"Select Province"
     }]);
 
     const [cities,setCities] = useState([{
-        name:"Select Province First Then",
-        province:"NONE", // none value
+        name:"",
+        province:"", 
         city:false
     }])
 
     useEffect(()=>{ 
+        //fetch provinces and fill <Select> with <option> of provinces
         async function getProvinces(){
             const data = await axios.get('http://localhost:5000/philippines/provinces')
             return data;
         }  
         getProvinces().then(response =>{
-           setProvinces(response.data);
+           setProvinces(response.data); 
         })
     },[])
     
     function getCitiesByProvinceKey(event){
+        //if province is selected fill <Select> with <option> of cities
       let provinceKey = event.target.value;
-    
       async function getCities(){
           const data = await axios.get(`http://localhost:5000/philippines/provinces/cities/${provinceKey}`)
           return data;
@@ -40,6 +42,7 @@ function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeEle
       }
        
     )}
+
 
     function validateMobileNumber(event){
        let mobileNumber = event.target.value;
@@ -61,16 +64,27 @@ function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeEle
         }
     }
 
-    function proceed(event){
+    function proceedToVerification(event){
         event.preventDefault();
-        console.log(formData)
+        if(isValidMobileNumber){
+        axios.post('http://localhost:5000/createVerification',{mobileNumber:formData.mobileNumber});
+        incrementSteps()
+        }
+    }
+    function isNotEmpty(val){
+        return val.length > 0 ? true : false; 
     }
     return (
         <div>
-        <div className="sign-up">        
+        <div className="sign-up">
+        <ol className="steps">
+            <li className="stepOne">1. Account</li>
+            <li className="stepTwo active">2. Information</li>
+            <li className="stepThree">3. Confirmation</li>
+        </ol>     
        <div className="form-wrapper">
        <div className="form-title">
-           <span>Sign Up</span></div>
+           <span>Setup Personal Information</span></div>
    <form className="form-form">
    <div className="input-wrapper">
        <label className="" htmlFor="email">Fullname</label>
@@ -85,7 +99,7 @@ function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeEle
    <div className="input-wrapper">
        <label className="" htmlFor="email">Province</label>
       <select className="bg1" onChange={getCitiesByProvinceKey}  name="province">
-          <option value="Select Province">Select Province</option>
+      <option value="">Select Province</option>
           {
               provinces.map(province=>{
                   return <option value={province.key} key={province.key}>{province.name}</option>
@@ -96,9 +110,10 @@ function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeEle
    <div className="input-wrapper">
        <label className="" htmlFor="email">City</label>
       <select className="bg1" onChange={handleFormData} name="city">
+    
           {
               cities.map((city,key)=>{
-                return <option value={city.name + " City"} key={key}>{city.name + " City"}</option>
+                return <option value={city.name} key={key}>Select City</option>
               } 
                 )
           }
@@ -109,7 +124,9 @@ function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeEle
        <textarea className="bg1" onChange={handleFormData} name="fullAddress"></textarea>
    </div>
    <div className="btn-wrapper">
-   <button type="submit" className="btn ok default-clr" onClick={proceed}>Next</button>
+   <button type="submit" className="btn bl-bg default-clr" onClick={proceedToVerification}>Next</button>
+   </div>
+   <div className="btn-wrapper">
    </div>
    </form>
    </div>

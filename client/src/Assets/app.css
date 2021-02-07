@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap');
 *{
     margin:0;
-    paddding:0;
+    padding:0;
     box-sizing: border-box;
 }
 body{
@@ -9,6 +9,9 @@ body{
 }
 .bg1{
     background:#F4F0F0
+}
+.bl-bg{
+    background:#000000;
 }
 .ok{
     background:#6BD382;
