@@ -2,7 +2,7 @@ import React,{useRef,useState} from 'react';
 import {Link} from "react-router-dom";
 
 
-function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttributes_GLOBAL}) {
+function StepOne({handleFormData,incrementSteps,showValid,showInvalid}) {
     
     const [isFormInValidState,setFormValidState] = useState({
         email: false,
@@ -10,9 +10,9 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
         confirmPassword: false
 
     });
-    function proceed(e){
-    e.preventDefault();
 
+    function proceedToStepTwo(e){
+    e.preventDefault();
         if(isFormInValidState.email && isFormInValidState.password && isFormInValidState.confirmPassword ){
             incrementSteps();
          }
@@ -26,36 +26,34 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
     const passwordInputRef = useRef();//password input, input element
     function validateIfPasswordsAreSame(event){
         const confirmPasswordInput = event.target;
+        let arrayOfPasswordInput = [confirmPasswordInput,passwordInputRef.current];
+        
         if(passwordInputRef.current.value === confirmPasswordInput.value){
-            changeElementAttributes_OVERIDE(VALID.OUTLINE,VALID.DISPLAY)
+            showValid(arrayOfPasswordInput,passwordNotSameErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,confirmPassword:true
             }))
         }
         else{
-            changeElementAttributes_OVERIDE(INVALID.OUTLINE,INVALID.DISPLAY)
+            showInvalid(arrayOfPasswordInput,passwordNotSameErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,confirmPassword:false
             }))
         }
 
-        function changeElementAttributes_OVERIDE(outline, display){ // modified global function, if password did not match
-            passwordInputRef.current.style.outline = outline
-            confirmPasswordInput.style.outline = outline
-            passwordNotSameErrorRef.current.style.display = display
-        }
+      
     }
     
     function validatePasswordLength(event){
         const password = event.target.value;
         if(password.length >= 8){
-            changeElementAttributes_GLOBAL(event,passwordLengthErrorRef,VALID.OUTLINE,VALID.DISPLAY);
+            showValid(event,passwordLengthErrorRef);
             setFormValidState(prevState=>({
                 ...prevState,password:true
             }))
         }
         else{
-            changeElementAttributes_GLOBAL(event,passwordLengthErrorRef,INVALID.OUTLINE,INVALID.DISPLAY);
+            showInvalid(event,passwordLengthErrorRef);
             setFormValidState(prevState=>({
                 ...prevState,password:false
             }))
@@ -67,13 +65,13 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
         let email = event.target.value;
 
         if(isValidEmail(email)){
-            changeElementAttributes_GLOBAL(event,emailErrorRef,VALID.OUTLINE,VALID.DISPLAY)
+            showValid(event,emailErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,email:true
             }))
         }
         else{
-            changeElementAttributes_GLOBAL(event,emailErrorRef,INVALID.OUTLINE,INVALID.DISPLAY)
+            showInvalid(event,emailErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,email:false
             }))
@@ -141,7 +139,7 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
         <Link to="/Signup">Already have an account? Sign In</Link>
         </div>
         <div className="btn-wrapper">
-        <button type="submit" className="btn bl-bg default-clr" onClick={proceed}>Next</button>
+        <button type="submit" className="btn bl-bg default-clr" onClick={proceedToStepTwo}>Next</button>
         </div>
         </form>
         </div>

@@ -2,21 +2,13 @@ import React,{useEffect,useState,useRef,} from 'react';
 import axios from 'axios';
 
 
-function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeElementAttributes_GLOBAL}) {
+function StepTwo({handleFormData,formData,incrementSteps,showValid,showInvalid}) {
 
     const mobileNumberErrorRef = useRef();
     const [isValidMobileNumber,setValidMobileNumber]= useState(false);
 
-    const [provinces,setProvinces] = useState([{
-        key:"",
-        name:"Select Province"
-    }]);
-
-    const [cities,setCities] = useState([{
-        name:"",
-        province:"", 
-        city:false
-    }])
+    const [provinces,setProvinces] = useState([]);
+    const [cities,setCities] = useState([])
 
     useEffect(()=>{ 
         //fetch provinces and fill <Select> with <option> of provinces
@@ -43,22 +35,21 @@ function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeEle
        
     )}
 
-
     function validateMobileNumber(event){
        let mobileNumber = event.target.value;
        let mobileRegexPattern = "^(09|\\+639)\\d{9}$"
         if(mobileNumber.match(mobileRegexPattern)){
-            changeElementAttributes_GLOBAL(event,mobileNumberErrorRef,VALID.OUTLINE,VALID.DISPLAY);
+            showValid(event,mobileNumberErrorRef)
             setValidMobileNumber(true);
         }
         else{
-            changeElementAttributes_GLOBAL(event,mobileNumberErrorRef,INVALID.OUTLINE,INVALID.DISPLAY)
+            showInvalid(event,mobileNumberErrorRef)
             setValidMobileNumber(false)
             if(event.target.value.length > 11){
                 let  concatenatedMobileNumber = event.target.value.substring(0,11);
                 event.target.value = concatenatedMobileNumber;
                 setValidMobileNumber(true)
-                changeElementAttributes_GLOBAL(event,mobileNumberErrorRef,VALID.OUTLINE,VALID.DISPLAY);
+                showInvalid(event,mobileNumberErrorRef);
             }
            
         }
@@ -71,8 +62,8 @@ function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeEle
         incrementSteps()
         }
     }
-    function isNotEmpty(val){
-        return val.length > 0 ? true : false; 
+    function isNotEmpty(element){
+        return element.length > 0 ? true : false; 
     }
     return (
         <div>
@@ -99,7 +90,6 @@ function StepTwo({handleFormData,formData,incrementSteps,INVALID,VALID,changeEle
    <div className="input-wrapper">
        <label className="" htmlFor="email">Province</label>
       <select className="bg1" onChange={getCitiesByProvinceKey}  name="province">
-      <option value="">Select Province</option>
           {
               provinces.map(province=>{
                   return <option value={province.key} key={province.key}>{province.name}</option>
