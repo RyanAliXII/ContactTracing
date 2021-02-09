@@ -5,10 +5,18 @@ const cities = require('philippines/cities');
 
 
 
-router.get('/provinces/cities/:key',(req,res)=>{
-    const key = req.params.key;
-
-    let citiesFilteredByProvinceKey = cities.map(city=>city).filter(city=>city.province === key);
+router.get('/provinces/cities/:name',(req,res)=>{
+    const name = req.params.name;
+    let citiesFilteredByProvinceKey = cities.map(city=>{
+        provinces.forEach(province =>{
+            if(province.key === city.province){
+                Object.assign(city, {province:province.name})
+            }
+        })
+        
+        return city;
+    }).filter(city=>city.province === name);
+    
     if(citiesFilteredByProvinceKey.length === 0) res.send({
         name:"NONE",
         province:"NONE",

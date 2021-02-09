@@ -6,5 +6,7 @@ const corsConfig = require('./corsConfig');
 
 router.post('/createVerification',loginSystemController.createVerification);
 router.post('/verify',loginSystemController.verify)
-
+router.post('/signUp',loginSystemController.signUp)
+router.post('/validateEmailIfTaken', loginSystemController.validateEmailIfTaken)
+router.post('/validateMobileNumberIfTaken', loginSystemController.validateMobileNumberIfTaken)
 module.exports = router;

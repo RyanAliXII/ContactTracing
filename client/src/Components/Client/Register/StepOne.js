@@ -1,5 +1,6 @@
 import React,{useRef,useState} from 'react';
 import {Link} from "react-router-dom";
+import axios from 'axios';
 
 
 function StepOne({handleFormData,incrementSteps,showValid,showInvalid}) {
@@ -19,7 +20,8 @@ function StepOne({handleFormData,incrementSteps,showValid,showInvalid}) {
          
     }
     const passwordNotSameErrorRef = useRef()//error message , span element
-    const emailErrorRef = useRef();//error message, span element
+    const emailInvalidErrorRef = useRef();//error message, span element
+    const emailTakenErrorRef = useRef();//error message, span element
     const passwordLengthErrorRef = useRef();//error message , span element
     
 
@@ -61,17 +63,25 @@ function StepOne({handleFormData,incrementSteps,showValid,showInvalid}) {
       
     }
 
-    function validateEmail(event){
+    async function validateEmail(event){
         let email = event.target.value;
-
+        showValid(event,emailTakenErrorRef)
         if(isValidEmail(email)){
-            showValid(event,emailErrorRef)
+            showValid(event,emailInvalidErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,email:true
             }))
+          const response = await axios.post('http://localhost:5000/validateEmailIfTaken',{email:email})
+          if(response.data){
+            
+            showInvalid(event,emailTakenErrorRef)
+            setFormValidState(prevState=>({
+                ...prevState,email:false
+            }))
+          }
         }
         else{
-            showInvalid(event,emailErrorRef)
+            showInvalid(event,emailInvalidErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,email:false
             }))
@@ -85,7 +95,6 @@ function StepOne({handleFormData,incrementSteps,showValid,showInvalid}) {
     return (
         <div>
              <div className="sign-up">      
-
             <ol className="steps">
             <li className="stepOne active">1. Account</li>
             <li className="stepTwo">2. Information</li>
@@ -106,8 +115,8 @@ function StepOne({handleFormData,incrementSteps,showValid,showInvalid}) {
             onInput={validateEmail} 
             className="input signin-input bg1"
              name="email" required></input>
-
-            <span className="error-message" ref={emailErrorRef}>Invalid email address</span>
+            <span className="error-message" ref={emailTakenErrorRef}>Email already taken</span>
+            <span className="error-message" ref={emailInvalidErrorRef}>Invalid email address</span>
 
         </div>
         <div className="input-wrapper">
@@ -127,7 +136,6 @@ function StepOne({handleFormData,incrementSteps,showValid,showInvalid}) {
             <label className="" htmlFor="email">Confirm password</label>
 
             <input type="password"
-             onChange={handleFormData}
               onInput={validateIfPasswordsAreSame} 
               className="input signin-input bg1" 
               name="confirmPassword" required></input>
@@ -136,7 +144,7 @@ function StepOne({handleFormData,incrementSteps,showValid,showInvalid}) {
 
         </div>
         <div className="have-account">
-        <Link to="/Signup">Already have an account? Sign In</Link>
+        <Link to="/signin">Already have an account? Sign In</Link>
         </div>
         <div className="btn-wrapper">
         <button type="submit" className="btn bl-bg default-clr" onClick={proceedToStepTwo}>Next</button>

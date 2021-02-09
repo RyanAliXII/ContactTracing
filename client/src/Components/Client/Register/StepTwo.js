@@ -4,7 +4,8 @@ import axios from 'axios';
 
 function StepTwo({handleFormData,formData,incrementSteps,showValid,showInvalid}) {
 
-    const mobileNumberErrorRef = useRef();
+    const invalidMobileNumberErrorRef = useRef(); //span error message
+    const mobileNumberTakenRef = useRef();// span error message
     const [isValidMobileNumber,setValidMobileNumber]= useState(false);
 
     const [provinces,setProvinces] = useState([]);
@@ -21,50 +22,60 @@ function StepTwo({handleFormData,formData,incrementSteps,showValid,showInvalid})
         })
     },[])
     
-    function getCitiesByProvinceKey(event){
+    function getCitiesByProvince(event){
         //if province is selected fill <Select> with <option> of cities
-      let provinceKey = event.target.value;
+      let provinceName = event.target.value;
       async function getCities(){
-          const data = await axios.get(`http://localhost:5000/philippines/provinces/cities/${provinceKey}`)
-          return data;
+          const response = await axios.get(`http://localhost:5000/philippines/provinces/cities/${provinceName}`)
+          setCities(response.data)
+          handleFormData(event)
       }
-      getCities().then(response => {
-        setCities(response.data)  
-        handleFormData(event)
-      }
-       
-    )}
+      getCities();
+}
 
-    function validateMobileNumber(event){
+    async function validateMobileNumber(event){
        let mobileNumber = event.target.value;
        let mobileRegexPattern = "^(09|\\+639)\\d{9}$"
+        showValid(event,mobileNumberTakenRef)
+        
         if(mobileNumber.match(mobileRegexPattern)){
-            showValid(event,mobileNumberErrorRef)
+            showValid(event,invalidMobileNumberErrorRef)
             setValidMobileNumber(true);
+            const response = await axios.post('http://localhost:5000/validateMobileNumberIfTaken',{mobileNumber:mobileNumber})
+            if(response.data){
+                showInvalid(event, mobileNumberTakenRef)
+            }
+
         }
         else{
-            showInvalid(event,mobileNumberErrorRef)
+            showInvalid(event,invalidMobileNumberErrorRef)
             setValidMobileNumber(false)
             if(event.target.value.length > 11){
                 let  concatenatedMobileNumber = event.target.value.substring(0,11);
                 event.target.value = concatenatedMobileNumber;
                 setValidMobileNumber(true)
-                showInvalid(event,mobileNumberErrorRef);
+                showInvalid(event,invalidMobileNumberErrorRef);
             }
            
         }
     }
 
-    function proceedToVerification(event){
+    function proceedToStepThree(event){
         event.preventDefault();
-        if(isValidMobileNumber){
+        if(isValidMobileNumber 
+            && isNotEmpty(formData.fullname) 
+            && isNotEmpty(formData.province)
+            && isNotEmpty(formData.city)
+            && isNotEmpty(formData.fullAddress)
+            ){
         axios.post('http://localhost:5000/createVerification',{mobileNumber:formData.mobileNumber});
         incrementSteps()
         }
     }
-    function isNotEmpty(element){
-        return element.length > 0 ? true : false; 
+    function isNotEmpty(someVar){
+        return someVar.length > 0 ? true : false; 
     }
+
     return (
         <div>
         <div className="sign-up">
@@ -84,15 +95,17 @@ function StepTwo({handleFormData,formData,incrementSteps,showValid,showInvalid})
    <div className="input-wrapper">
        <label className="" htmlFor="email">Mobile number</label>
        <input type="number" className="input bg1" onInput={validateMobileNumber} onChange={handleFormData}  name="mobileNumber" placeholder="09XX XXX XXXX"></input>
-       <span className="error-message" ref={mobileNumberErrorRef}>Invalid mobile number</span>
+       <span className="error-message" ref={mobileNumberTakenRef}>Mobile Number already taken</span>
+       <span className="error-message" ref={invalidMobileNumberErrorRef}>Invalid mobile number</span>
    </div>
    <div className="divider"></div>
    <div className="input-wrapper">
        <label className="" htmlFor="email">Province</label>
-      <select className="bg1" onChange={getCitiesByProvinceKey}  name="province">
+      <select className="bg1" onChange={getCitiesByProvince}  name="province">
+          <option value="">Select Province</option>
           {
               provinces.map(province=>{
-                  return <option value={province.key} key={province.key}>{province.name}</option>
+                  return <option value={province.name} key={province.key}>{province.name}</option>
               })
           }
       </select>
@@ -100,10 +113,10 @@ function StepTwo({handleFormData,formData,incrementSteps,showValid,showInvalid})
    <div className="input-wrapper">
        <label className="" htmlFor="email">City</label>
       <select className="bg1" onChange={handleFormData} name="city">
-    
+        <option value="">Select City</option>
           {
               cities.map((city,key)=>{
-                return <option value={city.name} key={key}>Select City</option>
+                return <option value={city.name + " City"} key={key}>{city.name + " City"}</option>
               } 
                 )
           }
@@ -114,7 +127,7 @@ function StepTwo({handleFormData,formData,incrementSteps,showValid,showInvalid})
        <textarea className="bg1" onChange={handleFormData} name="fullAddress"></textarea>
    </div>
    <div className="btn-wrapper">
-   <button type="submit" className="btn bl-bg default-clr" onClick={proceedToVerification}>Next</button>
+   <button type="submit" className="btn bl-bg default-clr" onClick={proceedToStepThree}>Next</button>
    </div>
    <div className="btn-wrapper">
    </div>
