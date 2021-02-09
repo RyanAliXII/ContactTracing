@@ -3,27 +3,42 @@ import '../../.././Assets/form.css'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import StepThree from './StepThree'
+import Login from '../../Login'
 function Register(props) {
 
     const [steps,setSteps] = useState(1);
     const [userFormData,setFormData] = useState();
 
-    const VALID = {
-        OUTLINE:'2px solid #6BD382',
-        DISPLAY:"NONE"
+    function showValid(inputs,messageTextRef){
+        const VALID = {
+            OUTLINE:'2px solid #6BD382',
+            DISPLAY:"NONE"
+        }
+        if(Array.isArray(inputs)){ //check if element is an array
+            inputs.forEach(input => { 
+              input.style.outline = VALID.OUTLINE //MAKE EVERY <input> OUTLINE GREEN
+            });
+        }
+        else{
+            inputs.target.style.outline = VALID.OUTLINE
+        }
+        messageTextRef.current.style.display = VALID.DISPLAY // REMOVE ERROR MESSAGE
     }
-    const INVALID = {
-        OUTLINE:'2px solid #db5248', 
-        DISPLAY:"inline"
-    }
-
-
-    //global function for changeElementAttributes
-    //to make inputs have an outline on valid or on invalid
-    //or to show display message or not
-    function changeElementAttributes_GLOBAL(event,errorRef,outline, display){ 
-        event.target.style.outline = outline;
-        errorRef.current.style.display = display 
+    
+    function showInvalid(inputs,messageTextRef){
+        const INVALID = {
+            OUTLINE:'2px solid #db5248', 
+            DISPLAY:"inline"
+        }
+        if(Array.isArray(inputs)){
+            inputs.forEach(input => { 
+              input.style.outline = INVALID.OUTLINE //MAKE EVERY <input> OUTLINE RED
+            });
+        }
+        else{
+            inputs.target.style.outline = INVALID.OUTLINE
+        }
+        messageTextRef.current.style.display = INVALID.DISPLAY // DISPLAY ERROR MESSAGE
     }
     
     function incrementSteps(){
@@ -35,17 +50,18 @@ function Register(props) {
             ...prevData,
             [name]:value
         }))
+       
     }
-
+  
     switch(steps){
         case 1: 
-        return <StepOne handleFormData={handleFormData} VALID={VALID} INVALID={INVALID} changeElementAttributes_GLOBAL={changeElementAttributes_GLOBAL} incrementSteps={incrementSteps}></StepOne>
+        return <StepOne handleFormData={handleFormData} showValid={showValid} showInvalid={showInvalid} incrementSteps={incrementSteps}></StepOne>
         case 2:
-        return <StepTwo handleFormData={handleFormData} VALID={VALID} formData = {userFormData} INVALID={INVALID} changeElementAttributes_GLOBAL={changeElementAttributes_GLOBAL} incrementSteps={incrementSteps} > </StepTwo>
+        return <StepTwo handleFormData={handleFormData} showValid={showValid} showInvalid={showInvalid}  incrementSteps={incrementSteps} formData={userFormData} > </StepTwo>
         case 3:
-        return <StepThree formData={userFormData}></StepThree>
+        return <StepThree formData={userFormData} showValid={showValid} ></StepThree>
         default:
-        return <StepOne handleFormData={handleFormData} VALID={VALID} INVALID={INVALID} changeElementAttributes_GLOBAL={changeElementAttributes_GLOBAL} incrementSteps={incrementSteps}></StepOne>
+        return <Login></Login>
     }
 }
 

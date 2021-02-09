@@ -16,8 +16,8 @@ function App() {
    <Header></Header>
   <Router>
     <Route component={Home} path="/" exact={true}></Route>
-    <Route component={Login}  path="/Signin"></Route>
-    <Route component={MainRegistrationForm} path="/Signup"></Route>
+    <Route component={Login}  path="/signin"></Route>
+    <Route component={MainRegistrationForm} path="/signup"></Route>
   </Router>
     </>
   );

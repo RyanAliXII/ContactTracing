@@ -1,8 +1,9 @@
 import React,{useRef,useState} from 'react';
 import {Link} from "react-router-dom";
+import axios from 'axios';
 
 
-function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttributes_GLOBAL}) {
+function StepOne({handleFormData,incrementSteps,showValid,showInvalid}) {
     
     const [isFormInValidState,setFormValidState] = useState({
         email: false,
@@ -10,52 +11,51 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
         confirmPassword: false
 
     });
-    function proceed(e){
-    e.preventDefault();
 
+    function proceedToStepTwo(e){
+    e.preventDefault();
         if(isFormInValidState.email && isFormInValidState.password && isFormInValidState.confirmPassword ){
             incrementSteps();
          }
          
     }
     const passwordNotSameErrorRef = useRef()//error message , span element
-    const emailErrorRef = useRef();//error message, span element
+    const emailInvalidErrorRef = useRef();//error message, span element
+    const emailTakenErrorRef = useRef();//error message, span element
     const passwordLengthErrorRef = useRef();//error message , span element
     
 
     const passwordInputRef = useRef();//password input, input element
     function validateIfPasswordsAreSame(event){
         const confirmPasswordInput = event.target;
+        let arrayOfPasswordInput = [confirmPasswordInput,passwordInputRef.current];
+        
         if(passwordInputRef.current.value === confirmPasswordInput.value){
-            changeElementAttributes_OVERIDE(VALID.OUTLINE,VALID.DISPLAY)
+            showValid(arrayOfPasswordInput,passwordNotSameErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,confirmPassword:true
             }))
         }
         else{
-            changeElementAttributes_OVERIDE(INVALID.OUTLINE,INVALID.DISPLAY)
+            showInvalid(arrayOfPasswordInput,passwordNotSameErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,confirmPassword:false
             }))
         }
 
-        function changeElementAttributes_OVERIDE(outline, display){ // modified global function, if password did not match
-            passwordInputRef.current.style.outline = outline
-            confirmPasswordInput.style.outline = outline
-            passwordNotSameErrorRef.current.style.display = display
-        }
+      
     }
     
     function validatePasswordLength(event){
         const password = event.target.value;
         if(password.length >= 8){
-            changeElementAttributes_GLOBAL(event,passwordLengthErrorRef,VALID.OUTLINE,VALID.DISPLAY);
+            showValid(event,passwordLengthErrorRef);
             setFormValidState(prevState=>({
                 ...prevState,password:true
             }))
         }
         else{
-            changeElementAttributes_GLOBAL(event,passwordLengthErrorRef,INVALID.OUTLINE,INVALID.DISPLAY);
+            showInvalid(event,passwordLengthErrorRef);
             setFormValidState(prevState=>({
                 ...prevState,password:false
             }))
@@ -63,17 +63,25 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
       
     }
 
-    function validateEmail(event){
+    async function validateEmail(event){
         let email = event.target.value;
-
+        showValid(event,emailTakenErrorRef)
         if(isValidEmail(email)){
-            changeElementAttributes_GLOBAL(event,emailErrorRef,VALID.OUTLINE,VALID.DISPLAY)
+            showValid(event,emailInvalidErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,email:true
             }))
+          const response = await axios.post('http://localhost:5000/validateEmailIfTaken',{email:email})
+          if(response.data){
+            
+            showInvalid(event,emailTakenErrorRef)
+            setFormValidState(prevState=>({
+                ...prevState,email:false
+            }))
+          }
         }
         else{
-            changeElementAttributes_GLOBAL(event,emailErrorRef,INVALID.OUTLINE,INVALID.DISPLAY)
+            showInvalid(event,emailInvalidErrorRef)
             setFormValidState(prevState=>({
                 ...prevState,email:false
             }))
@@ -87,7 +95,6 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
     return (
         <div>
              <div className="sign-up">      
-
             <ol className="steps">
             <li className="stepOne active">1. Account</li>
             <li className="stepTwo">2. Information</li>
@@ -108,8 +115,8 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
             onInput={validateEmail} 
             className="input signin-input bg1"
              name="email" required></input>
-
-            <span className="error-message" ref={emailErrorRef}>Invalid email address</span>
+            <span className="error-message" ref={emailTakenErrorRef}>Email already taken</span>
+            <span className="error-message" ref={emailInvalidErrorRef}>Invalid email address</span>
 
         </div>
         <div className="input-wrapper">
@@ -129,7 +136,6 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
             <label className="" htmlFor="email">Confirm password</label>
 
             <input type="password"
-             onChange={handleFormData}
               onInput={validateIfPasswordsAreSame} 
               className="input signin-input bg1" 
               name="confirmPassword" required></input>
@@ -138,10 +144,10 @@ function StepOne({handleFormData,incrementSteps,VALID,INVALID,changeElementAttri
 
         </div>
         <div className="have-account">
-        <Link to="/Signup">Already have an account? Sign In</Link>
+        <Link to="/signin">Already have an account? Sign In</Link>
         </div>
         <div className="btn-wrapper">
-        <button type="submit" className="btn bl-bg default-clr" onClick={proceed}>Next</button>
+        <button type="submit" className="btn bl-bg default-clr" onClick={proceedToStepTwo}>Next</button>
         </div>
         </form>
         </div>

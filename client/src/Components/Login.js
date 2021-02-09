@@ -18,7 +18,7 @@ function Login(props) {
             <input type="password" className="input signin-input bg1" required></input>
         </div>
         <div className="no-account">
-        <Link to="/Signup">Don't have an account? Sign Up</Link>
+        <Link to="/signup">Don't have an account? Sign Up</Link>
         </div>
         <div className="btn-wrapper">
         <button type="button" className="btn ok default-clr">Sign In</button>

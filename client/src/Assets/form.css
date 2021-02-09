@@ -108,3 +108,17 @@
     color:#f7f7f5;
     border-radius: 5px;
 }
+.input-code{
+    font-size:2rem;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
