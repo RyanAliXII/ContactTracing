@@ -4,6 +4,7 @@ import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import StepThree from './StepThree'
 import Login from '../../Login'
+import {Redirect} from 'react-router-dom'
 function Register(props) {
 
     const [steps,setSteps] = useState(1);
@@ -59,9 +60,9 @@ function Register(props) {
         case 2:
         return <StepTwo handleFormData={handleFormData} showValid={showValid} showInvalid={showInvalid}  incrementSteps={incrementSteps} formData={userFormData} > </StepTwo>
         case 3:
-        return <StepThree formData={userFormData} showValid={showValid} ></StepThree>
+        return <StepThree formData={userFormData} showValid={showValid} incrementSteps={incrementSteps} ></StepThree>
         default:
-        return <Login></Login>
+        return <Redirect to="/signin"></Redirect>
     }
 }
 
