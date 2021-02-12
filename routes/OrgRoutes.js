@@ -6,5 +6,5 @@ router.post('/signin',OrgController.signIn)
 router.post('/signup',OrgController.signUp)
 router.post('/createorg',OrgController.createOrg)
 router.get('/fetchorgs',OrgController.fetchOrgs)
-
+router.post('/createlog',OrgController.createTravelLog)
 module.exports = router;

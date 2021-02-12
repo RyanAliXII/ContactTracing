@@ -24,7 +24,6 @@ function AdminLogin({isAdminLoggedIn,setSession,setToken}) {
         },
         withCredentials: true,
       });
-      console.log(response)
       if (response.data.message === "OK") {
         setToken(response.data.token);
         setSession()
@@ -38,7 +37,7 @@ function AdminLogin({isAdminLoggedIn,setSession,setToken}) {
   }
 
   if (isAdminLoggedIn) {
-   return <Redirect to="/scanner"></Redirect>
+   return <Redirect to="/admin/dashboard"></Redirect>
   }
   else {
     return (

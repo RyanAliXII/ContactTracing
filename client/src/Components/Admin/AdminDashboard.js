@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import HeroImg from '../../Assets/images/social_distance.svg'
+import {Redirect} from 'react-router-dom'
 import axios from 'axios'
 
 
-function AdminDashboard(props) {
+function AdminDashboard({isAdminLoggedIn}) {
 
 
     const [orgFormClass, setOrgFormClass] = useState('form-wrapper fixed-pos default-bg hide')
@@ -17,6 +18,7 @@ function AdminDashboard(props) {
     const [lastAddedOrg, setLastAddedOrg] = useState('');
 
     const dashboardRef = useRef()
+
     function openCreateOrgForm() {
         setOrgFormClass('form-wrapper fixed-pos default-bg')
         addOpacity()
@@ -50,15 +52,21 @@ function AdminDashboard(props) {
         }));
         console.log(scannerFormData)
     }
-
+   
+    
     useEffect(() => {
-
+        let unmounted = false;
         async function fetchOrgs() {
-            const { data } = await axios.get('http://localhost:5000/org/fetchorgs');
+            const { data } = await axios.get('http://localhost:5000/org/fetchorgs'); 
+        if(!unmounted) {
             setOrgs(data);
         }
+        
+        }
         fetchOrgs();
-
+       return ()=>{
+           unmounted = true;
+       }
     }, [lastAddedOrg])
 
     async function createScannerAccount(event) {
@@ -67,6 +75,7 @@ function AdminDashboard(props) {
         console.log(response)
 
     }
+
     async function createOrg() {
         const { data } = await axios.post("http://localhost:5000/org/createorg", { org: orgFormData }, { withCredentials: true });
 
@@ -78,7 +87,10 @@ function AdminDashboard(props) {
 
         }
     }
-
+    if(!isAdminLoggedIn){
+      return  <Redirect to="/admin"/>
+    }
+    else{
     return (
         <>
             <div className="dashboard" ref={dashboardRef}>
@@ -182,6 +194,7 @@ function AdminDashboard(props) {
 
         </>
     );
+}
 }
 
 export default AdminDashboard;

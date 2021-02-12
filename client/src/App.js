@@ -49,11 +49,12 @@ function App() {
   useEffect(() => {
     async function checkSession(){
     const { data } = await axios.get('http://localhost:5000/auth', { withCredentials: true });
-      console.log(data)
       if(data.role === "Client"){
         setLoggedIn(data.auth)
       }else if(data.role === "Scanner"){
         setScannerLoggedIn(data.auth);
+      }else if(data.role === "Admin"){
+        setAdminLoggedIn(data.auth)
       }
     }
     checkSession()
@@ -75,7 +76,7 @@ function App() {
        <Route path="/scanner"><Scanner getToken={getToken} isScannerUserLoggedIn={isScannerUserLoggedIn}></Scanner></Route>
        <Route path="/org" exact><ScannerLogin getToken={getToken} setToken={setToken} setSession={setSession} isScannerUserLoggedIn={isScannerUserLoggedIn}></ScannerLogin></Route>
       <Route path="/admin" exact><AdminLogin getToken={getToken} setToken={setToken} setSession={setSession} isAdminLoggedIn={isAdminLoggedIn}></AdminLogin></Route>
-      <Route path="/admin/dashboard"><AdminDashboard></AdminDashboard></Route>
+      <Route path="/admin/dashboard"><AdminDashboard isAdminLoggedIn={isAdminLoggedIn}></AdminDashboard></Route>
       </Router>
     </>
   );

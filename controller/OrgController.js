@@ -23,6 +23,7 @@ module.exports ={
           
                    user = {
                         id: databaseResult._id,
+                        username:databaseResult.username,
                         org: databaseResult.org,
                         role:databaseResult.role
                     }    
@@ -80,6 +81,16 @@ module.exports ={
         } catch (error) {
              res.send("ERROR: SOMETHING BAD HAPPENED");
         } 
+    },
+    createTravelLog:async(req,res)=>{
+       const date = new Date();
+        const log = {
+            location:req.body.location,
+            time: date.toLocaleString()
+        }
+        const database = await dbUtils.connectToDB();
+        database.collection('users').updateOne({qrCode:req.body.qrCode},{$push:{travel_logs:log}})
+        res.send("OK")
     }
 
     

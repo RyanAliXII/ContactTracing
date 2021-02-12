@@ -7,12 +7,12 @@ module.exports = {
         try {
             const username = req.body.username;
             const password = req.body.password;
-            const database = await dbUtils.connectToDb();
+            const database = await dbUtils.connectToDB()
             const dbResult = await database.collection('users').findOne({ username: username });
-            const isPasswordTheSame = await bcrypt.compare(password, dbResult);
             if (dbResult == null) {
                 res.send("INVALID EMAIL");
             }
+            const isPasswordTheSame = await bcrypt.compare(password, dbResult.password);
             const user = {
                 id: dbResult._id,
                 username: dbResult.username,
@@ -44,7 +44,7 @@ module.exports = {
             }
             user.password = await bcrypt.hash(user.password, 10);
             const database = await dbUtils.connectToDB();
-            database.collection("users").insertOne(users)
+            database.collection("users").insertOne(user)
             res.send("OK")
 
         } catch (error) {
