@@ -20,11 +20,11 @@ module.exports = {
             user.password = await bcrypt.hash(user.password, 10);
             const database = await dbUtils.connectToDB();
             database.collection("users").insertOne(user);
+            res.send("OK")
         } catch (error) {
-            if (error) res.send("ERROR: SOMETHING BAD HAPPENED");
-        } finally {
-            res.send("OK");
-        }
+            console.log(error)
+             res.send("ERROR: SOMETHING BAD HAPPENED");
+        } 
     },
     signIn: async (req, res) => {
         const email = req.body.email;
@@ -68,6 +68,7 @@ module.exports = {
                 }
             }
         } catch (error) {
+            console.log(error);
             res.status(500);
         }
     },
@@ -87,6 +88,7 @@ module.exports = {
                 res.send("NOT VERIFIED");
             }
         } catch (error) {
+            console.log(error);
             res.send("BAD");
         }
     },
@@ -98,10 +100,10 @@ module.exports = {
             await twilioClient.verify
                 .services(serviceId)
                 .verifications.create({ to: mobileNumber, channel: "sms" });
+                res.send("OK")
         } catch (error) {
+            console.log(error)
             res.send("BAD");
-        } finally {
-            res.send("OK");
         }
     },
     validateEmailIfTaken: async (req, res) => {

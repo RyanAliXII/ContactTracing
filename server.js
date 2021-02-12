@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 5500
 const PH_PROVINCES_CITIES = require('./routes/philippines/philippines');
 const loginSystem = require('./routes/LoginSystemRoute')
 const orgRoutes = require('./routes/OrgRoutes')
+const adminRoutes = require('./routes/AdminRoute')
 const bodyParser = require('body-parser');
 const corsConfig = require('./routes/corsConfig')
 const cors = require('cors');
@@ -60,6 +61,7 @@ app.post('/fetchtoken', (req, res) => {
 app.use('/philippines', PH_PROVINCES_CITIES)
 app.use('/', loginSystem)
 app.use('/org',orgRoutes)
+app.use('/admin',adminRoutes)
 app.listen(process.env.PORT, () => {
     console.log("Server up and running: " + PORT);
 });

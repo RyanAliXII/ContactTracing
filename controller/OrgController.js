@@ -64,8 +64,9 @@ module.exports ={
             res.json(dbResult);
         
         }catch (error){
-            res.send("ERROR: SOMETHING BAD HAPPENED")
             console.log(error)
+            res.send("ERROR: SOMETHING BAD HAPPENED")
+            
         }
     },
     signUp:async(req,res)=>{
@@ -75,12 +76,10 @@ module.exports ={
             user.password = await bcrypt.hash(user.password, 10);
             const database = await dbUtils.connectToDB();
             database.collection("users").insertOne(user);
-
-        } catch (error) {
-            if (error) res.send("ERROR: SOMETHING BAD HAPPENED");
-        } finally {
             res.send("OK");
-        }
+        } catch (error) {
+             res.send("ERROR: SOMETHING BAD HAPPENED");
+        } 
     }
 
     

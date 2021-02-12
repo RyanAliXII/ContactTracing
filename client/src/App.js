@@ -7,22 +7,25 @@ import Dashboard from './Components/Client/Dashboard';
 import Scanner from './Components/Scanner/ScannerDashboard'
 import ScannerLogin from './Components/Scanner/ScannerLogin'
 import AdminDashboard from './Components/Admin/AdminDashboard'
+import AdminLogin from './Components/Admin/AdminLogin'
 import axios from 'axios'
 import './Assets/app.css'
 import './Assets/dashboard.css'
 
 import {
   BrowserRouter as Router,
-  Switch,
   Route,
 } from "react-router-dom";
 
 
 function App() {
-  const [accessToken, setAccessToken] = useState('');
+
   const [isClientLoggedIn, setLoggedIn] = useState(false);
   const [isScannerUserLoggedIn, setScannerLoggedIn] = useState(false);
+  const [isAdminLoggedIn,setAdminLoggedIn] = useState(false);
+
   const [session, fetchSession] = useState(1);
+  const [accessToken, setAccessToken] = useState('');
 
   function setToken(token) {
     setAccessToken(token);
@@ -71,7 +74,8 @@ function App() {
        <Route path="/dashboard"><Dashboard getToken={getToken}  isClientLoggedIn={isClientLoggedIn} /></Route>
        <Route path="/scanner"><Scanner getToken={getToken} isScannerUserLoggedIn={isScannerUserLoggedIn}></Scanner></Route>
        <Route path="/org" exact><ScannerLogin getToken={getToken} setToken={setToken} setSession={setSession} isScannerUserLoggedIn={isScannerUserLoggedIn}></ScannerLogin></Route>
-      <Route path="/admin"><AdminDashboard></AdminDashboard></Route>
+      <Route path="/admin" exact><AdminLogin getToken={getToken} setToken={setToken} setSession={setSession} isAdminLoggedIn={isAdminLoggedIn}></AdminLogin></Route>
+      <Route path="/admin/dashboard"><AdminDashboard></AdminDashboard></Route>
       </Router>
     </>
   );

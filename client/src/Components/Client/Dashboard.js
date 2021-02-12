@@ -34,7 +34,7 @@ function Dashboard({ isClientLoggedIn, getToken }) {
                         <span className="text">Welcome <br/> {user.name}</span>
                     </div>
                     <div className="hero-image">
-                        <img src={HeroImg}></img>
+                        <img src={HeroImg} alt="social_distance"></img>
                     </div>
                 </div>
                 <div className="db-menu">
