@@ -1,4 +1,5 @@
 module.exports = {
     origin: 'http://localhost:3000',
-    METHOD: 'GET,POST'
+    METHOD: 'GET,POST',
+    credentials:true
 }

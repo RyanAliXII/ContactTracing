@@ -1,6 +1,6 @@
 import React,{useState,useRef} from 'react';
 import axios from 'axios'
-function StepThree({formData,showValid}) {
+function StepThree({formData,showValid,incrementSteps}) {
 
     const [mobilecode,setCode] = useState();
     const codeErrorMessageRef = useRef()
@@ -17,8 +17,8 @@ function StepThree({formData,showValid}) {
         event.preventDefault()
         axios.post('http://localhost:5000/verify',{code:mobilecode,mobileNumber:formData.mobileNumber}).then(resp=>{
             if(resp.data === "VERIFIED"){
-                axios.post('http://localhost:5000/signUp',formData).then((resp)=>{
-                    window.location.replace("http://localhost:3000/signin");
+                axios.post('http://localhost:5000/signup',formData).then((resp)=>{
+                   incrementSteps();
                 })
             }
             else{
