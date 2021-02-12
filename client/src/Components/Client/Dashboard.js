@@ -17,7 +17,6 @@ function Dashboard({ isClientLoggedIn, getToken }) {
             }
           
         }
-        
         fetchClientData();
     }, [isClientLoggedIn])
 

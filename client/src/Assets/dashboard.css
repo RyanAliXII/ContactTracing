@@ -73,3 +73,29 @@
 .generate{
     margin-top:2rem;
 }
+.scanner-wrapper{
+    width: 90%;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    margin: auto;
+    margin-top: 25px;
+    flex-direction: column;
+    gap: 1rem;
+}
+.scanner{
+    width:60%;
+    max-width:240px;
+    min-width: 200px;
+}
+.scanner-info{
+    width:90%;
+    margin: auto;
+}
+.org{
+    font-size: calc(1rem + 1vw);
+}
+.username{
+    font-weight: 300;
+}
