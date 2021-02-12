@@ -16,11 +16,9 @@ module.exports = {
     signUp: async (req, res) => {
         try {
             const user = req.body;
-
-            Object.assign(user, { qrCode: uuidV4() });
+            Object.assign(user, { qrCode: uuidV4(),role:"Client"});
             user.password = await bcrypt.hash(user.password, 10);
             const database = await dbUtils.connectToDB();
-
             database.collection("users").insertOne(user);
         } catch (error) {
             if (error) res.send("ERROR: SOMETHING BAD HAPPENED");
@@ -44,25 +42,26 @@ module.exports = {
                     password,
                     databaseResult.password
                 );
-
-                const user = {
-                    id: databaseResult._id,
-                    name: databaseResult.fullname,
-                    email:databaseResult.email,
-                    mobileNumber:databaseResult.mobileNumber,
-                    province:databaseResult.province,
-                    city:databaseResult.city,
-                    fullAddress:databaseResult.fullAddress,
-                    qrCode:databaseResult.qrCode
-                };
+                   user = {
+                        id: databaseResult._id,
+                        name: databaseResult.fullname,
+                        email:databaseResult.email,
+                        mobileNumber:databaseResult.mobileNumber,
+                        province:databaseResult.province,
+                        city:databaseResult.city,
+                        fullAddress:databaseResult.fullAddress,
+                        qrCode:databaseResult.qrCode,
+                        role:databaseResult.role
+                    }    
+            
+           
 
                 if (isPasswordTheSame) {
+        
                     req.session.user = user;
-                    
                     const accessToken = jwt.sign(req.session.user,process.env.JWT_SECRET)
                    const refreshToken = jwt.sign(req.session.user,process.env.JWT_REFRESH_SECRET)
-                   console.log(refreshToken)
-                   res.cookie("refreshToken",refreshToken,{maxAge:3600 * 1000, httpOnly:true}).json({message:"OK",token:accessToken});
+                   res.cookie("refreshToken",refreshToken,{maxAge:3600 * 1000, httpOnly:true}).json({message:"OK",token:accessToken,role:user.role});
                    
                 } else {
                     res.send("Invalid Password");

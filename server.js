@@ -4,6 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 5500
 const PH_PROVINCES_CITIES = require('./routes/philippines/philippines');
 const loginSystem = require('./routes/LoginSystemRoute')
+const orgRoutes = require('./routes/OrgRoutes')
 const bodyParser = require('body-parser');
 const corsConfig = require('./routes/corsConfig')
 const cors = require('cors');
@@ -19,10 +20,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors(corsConfig));
 
 
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    maxAge: 5000,
+    maxAge: 3600 * 1000,
     saveUninitialized: true,
     cookie: { secure: false, httpOnly: true }
 }))
@@ -31,12 +33,15 @@ app.use(session({
 app.get('/auth', (req, res) => {
 
     if (req.session.user === undefined) {
-        res.send(false);
+        res.json({auth:false,role:"NONE"});
     }
     else {
-        res.send(true);
-
+        res.json({auth:true,role:req.session.user.role})
     }
+})
+app.post('/user',(req,res)=>{
+    const user = req.session.user;
+    res.json(user)
 })
 
 app.post('/fetchtoken', (req, res) => {
@@ -54,7 +59,7 @@ app.post('/fetchtoken', (req, res) => {
 
 app.use('/philippines', PH_PROVINCES_CITIES)
 app.use('/', loginSystem)
-
+app.use('/org',orgRoutes)
 app.listen(process.env.PORT, () => {
     console.log("Server up and running: " + PORT);
 });

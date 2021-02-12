@@ -3,7 +3,6 @@ import '../../.././Assets/form.css'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import StepThree from './StepThree'
-import Login from '../../Login'
 import {Redirect} from 'react-router-dom'
 function Register(props) {
 

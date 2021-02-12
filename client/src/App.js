@@ -4,19 +4,24 @@ import Home from './Components/Home';
 import Login from './Components/Login';
 import Register from './Components/Client/Register/Register';
 import Dashboard from './Components/Client/Dashboard';
+import Scanner from './Components/Scanner/ScannerDashboard'
+import ScannerLogin from './Components/Scanner/ScannerLogin'
+import AdminDashboard from './Components/Admin/AdminDashboard'
 import axios from 'axios'
 import './Assets/app.css'
+import './Assets/dashboard.css'
+
 import {
   BrowserRouter as Router,
+  Switch,
   Route,
 } from "react-router-dom";
 
 
 function App() {
-
-
   const [accessToken, setAccessToken] = useState('');
   const [isClientLoggedIn, setLoggedIn] = useState(false);
+  const [isScannerUserLoggedIn, setScannerLoggedIn] = useState(false);
   const [session, fetchSession] = useState(1);
 
   function setToken(token) {
@@ -38,23 +43,35 @@ function App() {
     return " "
   }
 
-  useEffect(async () => {
+  useEffect(() => {
+    async function checkSession(){
     const { data } = await axios.get('http://localhost:5000/auth', { withCredentials: true });
-    setLoggedIn(data)
+      console.log(data)
+      if(data.role === "Client"){
+        setLoggedIn(data.auth)
+      }else if(data.role === "Scanner"){
+        setScannerLoggedIn(data.auth);
+      }
+    }
+    checkSession()
   }, [session])
 
   function setSession() {
     fetchSession(prevState => prevState + 1);
   }
+  
 
   return (
     <>
       <Header></Header>
       <Router>
-        <Route component={Home} path="/" exact={true}></Route>
-        <Route path="/signin"><Login setSession={setSession} setToken={setToken} isClientLoggedIn={isClientLoggedIn} /></Route>
-        <Route><Dashboard getToken={getToken} isClientLoggedIn={isClientLoggedIn} /></Route>
-        <Route component={Register} path="/signup"></Route>
+     <Route path="/" exact={true} component={Home}></Route>
+      <Route path="/signin"><Login setSession={setSession} setToken={setToken} isClientLoggedIn={isClientLoggedIn}  isScannerUserLoggedIn={isScannerUserLoggedIn} ></Login></Route>
+       <Route path="/signup"><Register></Register></Route>
+       <Route path="/dashboard"><Dashboard getToken={getToken}  isClientLoggedIn={isClientLoggedIn} /></Route>
+       <Route path="/scanner"><Scanner getToken={getToken} isScannerUserLoggedIn={isScannerUserLoggedIn}></Scanner></Route>
+       <Route path="/org" exact><ScannerLogin getToken={getToken} setToken={setToken} setSession={setSession} isScannerUserLoggedIn={isScannerUserLoggedIn}></ScannerLogin></Route>
+      <Route path="/admin"><AdminDashboard></AdminDashboard></Route>
       </Router>
     </>
   );
