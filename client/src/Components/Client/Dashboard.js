@@ -1,36 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext} from 'react';
 import { Redirect } from 'react-router-dom'
 import QRCode from 'qrcode.react'
 import axios from 'axios'
 import HeroImg from '../../Assets/images/social_distance.svg'
-function Dashboard({ isClientLoggedIn, getToken }) {
+import {UserContext} from '../../Contexts/UserContext'
+import {AuthContext} from '../../Contexts/AuthContext'
+import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 
-    const [user, setUser] = useState({
-        name:"Ryan Ali",
-        qrCode:"SOMETHING"
-    });
-    useEffect(() => {
-        async function fetchClientData(){
-            if (isClientLoggedIn) {
-                const { data } = await axios.post('http://localhost:5000/user', {}, { withCredentials: true })
-                setUser(data)
+function Dashboard(props) {
+
+    const [user,setUser] = useContext(UserContext)
+    const [session,fetchSession] = useContext(AuthContext)
+    const [logsNavState,setLogsNavState] = useContext(LogsNavigationContext)
+
+
+        async function generateQrCode(){
+            try{
+            const {data} = await axios.post('http://localhost:5000/client/generateQR',{id:user.id},{withCredentials: true})
+            if(data === "OK"){
+                fetchSession(prevState => prevState + 1);
+            } 
+
+            }catch(error){
+                console.log(error);
             }
-          
-        }
-        fetchClientData();
-    }, [isClientLoggedIn])
+        }   
 
-    if (!isClientLoggedIn) {
-       return <Redirect to='/signin' />
-    }
-    else
-    {
+
+        if(logsNavState){
+            return <Redirect to="/dashboard/logs"></Redirect>
+        }
 
         return (
+          JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Client" ? (
             <div className="dashboard">
                 <div className="hero">
                     <div className="hero-text">
-                        <span className="text">Welcome <br/> {user.name}</span>
+                        <span className="text">Welcome <br/>{user.name}</span>
                     </div>
                     <div className="hero-image">
                         <img src={HeroImg} alt="social_distance"></img>
@@ -40,7 +46,7 @@ function Dashboard({ isClientLoggedIn, getToken }) {
                     <div className="menu-selection bg1">
                         <span>My Profile</span>
                     </div>
-                    <div className="menu-selection bg1"><span>Travel logs</span></div>
+                    <div className="menu-selection bg1" onClick={()=>{setLogsNavState(true)}}><span>Travel logs</span></div>
                 </div>
                 <div className="qr">
                     <span className="title">Scan Here</span>
@@ -48,15 +54,18 @@ function Dashboard({ isClientLoggedIn, getToken }) {
                     <QRCode value={user.qrCode} size={190}/>
                     </div>
                  <div className="desc-wrapper"> <span className="desc-text">You can screenshot the QR code if you are going out without internet connection. Just make sure you won’t share it with others.</span></div>  
-                 <div className="generate"><button type="button" className="generate-btn bl-bg default-clr btn">Generate New QR Code</button></div>  
+                 <div className="generate"><button type="button" onClick={generateQrCode} className="generate-btn bl-bg default-clr btn" >Generate New QR Code</button></div>  
                 </div>
                 <div className="create-org">
                     
                 </div>
+                
+              
             </div>
+          ) : (<Redirect to='/'></Redirect>)
         );
 
-    }
+    
 }
 
 export default Dashboard;

@@ -6,10 +6,10 @@ import axios from 'axios';
 
 
 
-function ScannerDashboard({ isScannerUserLoggedIn, getToken }) {
+function ScannerDashboard({  }) {
     const [findScan, setScan] = useState(false)
     const [user, setUser] = useState({
-        org: "NONE"
+        room: "NONE"
     });
     function handleError() {
         console.log("ERROR")
@@ -23,7 +23,7 @@ function ScannerDashboard({ isScannerUserLoggedIn, getToken }) {
     }
     const scannerMessageRef = useRef();
     async function sendData(qrCode) {
-        const {data} = await axios.post('http://localhost:5000/org/createlog', { qrCode: qrCode,location:user.org})
+        const {data} = await axios.post('http://localhost:5000/room/createlog', { qrCode: qrCode,location:user.room})
         if(data === "OK"){
             scannerMessageRef.current.innerText= "QR CODE SUCCESSFULLY SCANNED"
             setTimeout(()=>{
@@ -49,17 +49,12 @@ function ScannerDashboard({ isScannerUserLoggedIn, getToken }) {
         return () => {
             unmount = true
         }
-    }, [isScannerUserLoggedIn]);
-
-
-    if (!isScannerUserLoggedIn) {
-        return <Redirect to="/org"></Redirect>
-    } else {
+    }, []);
         return (
-
+            JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Scanner"  ? (
             <div>
                 <div className="scanner-info">
-                    <span className="org">{user.org}</span><br></br>
+                    <span className="org">{user.room}</span><br></br>
                     <span className="username">{user.username}</span>
                 </div>
                 <div className="scanner-wrapper">
@@ -72,8 +67,8 @@ function ScannerDashboard({ isScannerUserLoggedIn, getToken }) {
                     <div className=""></div>
                 </div>
             </div>
+            ): (<Redirect to="/"></Redirect>)
         );
-    }
 }
 
 export default ScannerDashboard;

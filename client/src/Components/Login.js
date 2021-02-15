@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useContext,useEffect } from "react";
 import "../Assets/form.css";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
+import {AuthContext} from '../Contexts/AuthContext'
 
-
-function Login({isClientLoggedIn,isScannerUserLoggedIn,setSession,setToken}) {
+function Login({}) {
   
   const [formData, setFormData] = useState({});
+  const [session,refetchSession] = useContext(AuthContext)
 
   function handleFormData(event) {
     const { name, value } = event.target;
@@ -25,9 +26,9 @@ function Login({isClientLoggedIn,isScannerUserLoggedIn,setSession,setToken}) {
         withCredentials: true,
       });
       if (response.data.message === "OK") {
-        setToken(response.data.token);
-        setSession()
-      }
+        localStorage.setItem('auth',JSON.stringify({bool:true,role:"Client"}))
+        refetchSession(prevState=> prevState + 1);
+      } 
       else {
         console.log(response.data)
       }
@@ -35,14 +36,8 @@ function Login({isClientLoggedIn,isScannerUserLoggedIn,setSession,setToken}) {
       console.log(error)
     }
   }
-
-  if (isClientLoggedIn) {
-   return <Redirect to="/dashboard"></Redirect>
-  }else if(isScannerUserLoggedIn){
-    return <Redirect to="/scanner"></Redirect>
-  }
-  else {
     return (
+     !JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role !== "Client" ? (
       <div className="sign-in">
         <div className="form-wrapper">
           <div className="form-title">
@@ -88,8 +83,9 @@ function Login({isClientLoggedIn,isScannerUserLoggedIn,setSession,setToken}) {
           </form>
         </div>
       </div>
+      ) : (<Redirect to="/dashboard"></Redirect>)
     );
-  }
+  
 }
 
 export default Login;

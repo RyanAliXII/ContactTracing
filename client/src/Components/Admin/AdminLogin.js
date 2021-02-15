@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { Redirect } from "react-router-dom";
+import {AuthContext} from '../../Contexts/AuthContext'
 import axios from "axios";
 
 
-function AdminLogin({isAdminLoggedIn,setSession,setToken}) {
+function AdminLogin() {
   
+  const [session,reFetchSession] = useContext(AuthContext)
   const [formData, setFormData] = useState({});
-
   function handleFormData(event) {
     const { name, value } = event.target;
     setFormData((prevState) => ({
@@ -25,8 +26,8 @@ function AdminLogin({isAdminLoggedIn,setSession,setToken}) {
         withCredentials: true,
       });
       if (response.data.message === "OK") {
-        setToken(response.data.token);
-        setSession()
+        localStorage.setItem('auth',JSON.stringify({bool:true,role:"Admin"}))
+        reFetchSession(prevState => prevState + 1);
       }
       else {
         console.log(response.data)
@@ -36,11 +37,8 @@ function AdminLogin({isAdminLoggedIn,setSession,setToken}) {
     }
   }
 
-  if (isAdminLoggedIn) {
-   return <Redirect to="/admin/dashboard"></Redirect>
-  }
-  else {
     return (
+      !JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role !== "Admin" ? (
       <div className="sign-in">
         <div className="form-wrapper">
           <div className="form-title">
@@ -85,8 +83,9 @@ function AdminLogin({isAdminLoggedIn,setSession,setToken}) {
           </form>
         </div>
       </div>
+      ):(<Redirect to="/admin/dashboard"></Redirect>)
     );
   }
-}
+
 
 export default AdminLogin;

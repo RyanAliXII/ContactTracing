@@ -13,8 +13,17 @@ body{
 .bl-bg{
     background:#000000;
 }
+.warn-bg{
+    background-color:#e65353
+}
+.warn{
+    color:#e65353
+}
 .ok{
     background:#6BD382;
+}
+.ok-text{
+    color:#6BD382;
 }
 .default-clr{
     color:#FFFFFF
@@ -22,6 +31,23 @@ body{
 .hide{
     display:none;
 }
+
 .default-bg{
     background:#FFFFFF;
+}
+.confirm{
+    cursor: pointer;
+}
+.report-btn{
+}
+.cancel{
+cursor: pointer;
+
+}
+.report-prompt{
+    height: 10vh;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    gap: 0.6rem;
 }

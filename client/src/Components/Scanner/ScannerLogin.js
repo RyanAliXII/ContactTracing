@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
+import {AuthContext} from '../../Contexts/AuthContext'
 
 
-function ScannerLogin({isScannerUserLoggedIn,setSession,setToken}) {
-  
+function ScannerLogin() {
+  const [session,refetchSession] = useContext(AuthContext)  
   const [formData, setFormData] = useState({});
 
   function handleFormData(event) {
@@ -17,7 +18,7 @@ function ScannerLogin({isScannerUserLoggedIn,setSession,setToken}) {
   async function sendFormData() {
     try {
        
-      const response = await axios.post("http://localhost:5000/org/signin", formData, {
+      const response = await axios.post("http://localhost:5000/room/signin", formData, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "http://localhost:3000",
@@ -25,8 +26,8 @@ function ScannerLogin({isScannerUserLoggedIn,setSession,setToken}) {
         withCredentials: true,
       });
       if (response.data.message === "OK") {
-        setToken(response.data.token);
-        setSession()
+        localStorage.setItem('auth',JSON.stringify({bool:true,role:"Scanner"}))
+        refetchSession(prevState=> prevState + 1);
       }
       else {
         console.log(response.data)
@@ -36,11 +37,9 @@ function ScannerLogin({isScannerUserLoggedIn,setSession,setToken}) {
     }
   }
 
-  if (isScannerUserLoggedIn) {
-   return <Redirect to="/scanner"></Redirect>
-  }
-  else {
+
     return (
+      !JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role !== "Scanner" ? (
       <div className="sign-in">
         <div className="form-wrapper">
           <div className="form-title">
@@ -85,8 +84,7 @@ function ScannerLogin({isScannerUserLoggedIn,setSession,setToken}) {
           </form>
         </div>
       </div>
+      ):(<Redirect to="/org/Scanner"></Redirect>)
     );
   }
-}
-
 export default ScannerLogin;

@@ -4,27 +4,27 @@ import {Redirect} from 'react-router-dom'
 import axios from 'axios'
 
 
-function AdminDashboard({isAdminLoggedIn}) {
+function AdminDashboard() {
 
 
-    const [orgFormClass, setOrgFormClass] = useState('form-wrapper fixed-pos default-bg hide')
+    const [roomFormClass, setRoomFormClass] = useState('form-wrapper fixed-pos default-bg hide')
     const [scannerFormClass, setScannerFormClass] = useState('form-wrapper fixed-pos default-bg hide')
 
 
-    const [orgFormData, setOrgFormData] = useState('');
+    const [roomFormData, setRoomFormData] = useState('');
     const [scannerFormData, setScannerFormData] = useState({});
 
-    const [orgs, setOrgs] = useState([]);
-    const [lastAddedOrg, setLastAddedOrg] = useState('');
+    const [rooms, setRooms] = useState([]);
+    const [lastAddedRoom, setLastAddedRoom] = useState('');
 
     const dashboardRef = useRef()
 
-    function openCreateOrgForm() {
-        setOrgFormClass('form-wrapper fixed-pos default-bg')
+    function openCreateRoomForm() {
+        setRoomFormClass('form-wrapper fixed-pos default-bg')
         addOpacity()
     }
-    function closeCreateOrgForm() {
-        setOrgFormClass('form-wrapper fixed-pos default-bg hide')
+    function closeCreateRoomForm() {
+        setRoomFormClass('form-wrapper fixed-pos default-bg hide')
         removeOpacity()
     }
     function openScannerForm() {
@@ -42,7 +42,7 @@ function AdminDashboard({isAdminLoggedIn}) {
         dashboardRef.current.style.opacity = '1';
     }
     function handleOrgFormData(event) {
-        setOrgFormData(event.target.value);
+        setRoomFormData(event.target.value);
 
     }
     function handleScannerFormData(event) {
@@ -53,45 +53,31 @@ function AdminDashboard({isAdminLoggedIn}) {
         console.log(scannerFormData)
     }
    
-    
+    async function createRoom(){
+        const {data}  = await  axios.post('http://localhost:5000/room/createroom',{room:roomFormData})
+        setLastAddedRoom(roomFormData);
+        closeCreateRoomForm()
+
+    }
     useEffect(() => {
-        let unmounted = false;
-        async function fetchOrgs() {
-            const { data } = await axios.get('http://localhost:5000/org/fetchorgs'); 
-        if(!unmounted) {
-            setOrgs(data);
-        }
-        
-        }
-        fetchOrgs();
-       return ()=>{
-           unmounted = true;
-       }
-    }, [lastAddedOrg])
 
-    async function createScannerAccount(event) {
+        async function fetchRooms(){
+            const {data} = await axios.get('http://localhost:5000/room/fetchrooms')
+            setRooms(data);
+        }
+        fetchRooms();
+    },[lastAddedRoom])
+
+    async function createScannerAccount(event){
         event.preventDefault();
-        const response = await axios.post('http://localhost:5000/org/signup', scannerFormData, { withCredentials: true })
-        console.log(response)
-
+        const {data} = await axios.post('http://localhost:5000/room/signup',scannerFormData);
+        console.log(data)     
     }
+    
 
-    async function createOrg() {
-        const { data } = await axios.post("http://localhost:5000/org/createorg", { org: orgFormData }, { withCredentials: true });
 
-        if (data === "OK") {
-            console.log(data);
-            setLastAddedOrg(orgFormData);
-        }
-        else {
-
-        }
-    }
-    if(!isAdminLoggedIn){
-      return  <Redirect to="/admin"/>
-    }
-    else{
     return (
+        JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Admin"  ? (
         <>
             <div className="dashboard" ref={dashboardRef}>
                 <div className="hero">
@@ -109,8 +95,8 @@ function AdminDashboard({isAdminLoggedIn}) {
                     <div className="menu-selection bg1">
                         <span>View Logs</span>
                     </div>
-                    <div className="menu-selection bg1" onClick={openCreateOrgForm}>
-                        <span>Create Organization</span>
+                    <div className="menu-selection bg1" onClick={openCreateRoomForm}>
+                        <span>Add Room</span>
                     </div>
                     <div className="menu-selection bg1" onClick={openScannerForm}>
                         <span>Scanner Account</span>
@@ -118,15 +104,15 @@ function AdminDashboard({isAdminLoggedIn}) {
                 </div>
 
             </div>
-            <div className={orgFormClass}>
+            <div className={roomFormClass}>
                 <div className="form-title org-form-title">
-                    <span>Create Organization</span></div>
+                    <span>Create Room</span></div>
                 <form className="form-form org-form">
                     <div className="input-wrapper org-input-wrapper">
-                        <label className="" htmlFor="org">Organization Name</label>
+                        <label className="" htmlFor="org">Room Name</label>
                         <input type="name"
                             className="input signin-input bg1"
-                            name="org"
+                            name="room"
                             onChange={handleOrgFormData}
                             required></input>
                     </div>
@@ -134,11 +120,11 @@ function AdminDashboard({isAdminLoggedIn}) {
 
                         <button type="button"
                             className="btn bl-bg default-clr"
-                            onClick={createOrg}>Create</button>
+                            onClick={createRoom}>Create</button>
 
                         <button type="button"
                             className="btn bg1"
-                            onClick={closeCreateOrgForm}>Cancel</button>
+                            onClick={closeCreateRoomForm}>Cancel</button>
                     </div>
 
                 </form>
@@ -166,14 +152,14 @@ function AdminDashboard({isAdminLoggedIn}) {
                             required></input>
                     </div>
                     <div className="input-wrapper org-input-wrapper">
-                        <label className="" htmlFor="org">Organization</label>
+                        <label className="" htmlFor="org">Room</label>
                         <select className="bg1"
-                            name="org"
+                            name="room"
                             onChange={handleScannerFormData}>
                             <option value="">Select Organization</option>
                             {
-                                orgs.map(org => {
-                                    return <option value={org.org} key={org._id}>{org.org}</option>
+                                rooms.map(room => {
+                                    return <option value={room.room} key={room._id}>{room.room}</option>
                                 })
                             }
                         </select>
@@ -187,14 +173,9 @@ function AdminDashboard({isAdminLoggedIn}) {
 
                 </form>
             </div>
-
-
-
-
-
         </>
+        ) : (<Redirect to="/"></Redirect>)
     );
-}
 }
 
 export default AdminDashboard;
