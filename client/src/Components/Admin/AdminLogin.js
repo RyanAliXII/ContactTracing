@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState,useContext,useRef} from "react";
 import { Redirect } from "react-router-dom";
 import {AuthContext} from '../../Contexts/AuthContext'
 import axios from "axios";
@@ -8,6 +8,7 @@ function AdminLogin() {
   
   const [session,reFetchSession] = useContext(AuthContext)
   const [formData, setFormData] = useState({});
+  const invalidLoginRef = useRef()
   function handleFormData(event) {
     const { name, value } = event.target;
     setFormData((prevState) => ({
@@ -30,7 +31,7 @@ function AdminLogin() {
         reFetchSession(prevState => prevState + 1);
       }
       else {
-        console.log(response.data)
+        invalidLoginRef.current.style.display = "inline"
       }
     } catch (error) {
       console.log(error)
@@ -45,6 +46,7 @@ function AdminLogin() {
             <span>Administrator</span>
           </div>
           <form className="form-form">
+          <span className="error-message warn" ref={invalidLoginRef}>Invalid username or password</span>
             <div className="input-wrapper">
               <label className="" htmlFor="email">
                Username

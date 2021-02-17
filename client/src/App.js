@@ -8,11 +8,15 @@ import ScannerLogin from './Components/Scanner/ScannerLogin'
 import AdminDashboard from './Components/Admin/AdminDashboard'
 import AdminLogin from './Components/Admin/AdminLogin'
 import TravelLogs from './Components/Client/TravelLogs'
+import Header from './Components/Header'
+import Reports from './Components/Admin/Reports'
 import './Assets/app.css'
 import './Assets/dashboard.css'
 import {AuthProvider} from './Contexts/AuthContext'
 import {UserProvider} from './Contexts/UserContext'
 import {LogsNavigationProvider} from './Contexts/LogsNavigationContext'
+import {ReportsNavigationProvider} from './Contexts/ReportNavigationContext'
+import Logs from './Components/Admin/Logs'
 import {
   BrowserRouter as Router,
   Route,
@@ -46,6 +50,7 @@ function App() {
         </Route>
 
         <Route path="/dashboard" >
+          <Header></Header>
           <Dashboard></Dashboard>
         </Route>
 
@@ -55,6 +60,7 @@ function App() {
         </LogsNavigationProvider>
 
         <Route path="/org/scanner">
+          <Header></Header>
           <Scanner >
           </Scanner>
         </Route>
@@ -63,12 +69,30 @@ function App() {
           </ScannerLogin>
         </Route>
 
-        <Route path="/admin" exact>
+   
+      <Route path="/admin" exact>
           <AdminLogin>
-          </AdminLogin></Route>
-        <Route path="/admin/dashboard">
-          <AdminDashboard >
-          </AdminDashboard></Route>
+          </AdminLogin>
+          </Route>
+      <ReportsNavigationProvider>
+      <LogsNavigationProvider>   
+      <Route path="/admin/reports">
+            <Reports></Reports>
+          </Route>
+      <Route path="/admin/dashboard">
+          <Header></Header>
+          <AdminDashboard>
+          </AdminDashboard>
+          </Route>
+      <Route path="/admin/logs">
+          <Logs></Logs>
+        </Route>  
+        </LogsNavigationProvider>  
+       </ReportsNavigationProvider>
+         
+    
+      
+     
           </UserProvider>
         </AuthProvider>
 

@@ -1,6 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect,useContext } from 'react';
 import HeroImg from '../../Assets/images/social_distance.svg'
 import {Redirect} from 'react-router-dom'
+import {AuthContext} from '../../Contexts/AuthContext'
+import {ReportsNavigationContext} from '../../Contexts/ReportNavigationContext'
+import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import axios from 'axios'
 
 
@@ -9,10 +12,12 @@ function AdminDashboard() {
 
     const [roomFormClass, setRoomFormClass] = useState('form-wrapper fixed-pos default-bg hide')
     const [scannerFormClass, setScannerFormClass] = useState('form-wrapper fixed-pos default-bg hide')
-
-
+    const [session,fetchSession] = useContext(AuthContext);
+    const [reportsNavState,setReportsNavState] = useContext(ReportsNavigationContext);
+    const [logsNavState,setLogsNavState] = useContext(LogsNavigationContext)
     const [roomFormData, setRoomFormData] = useState('');
     const [scannerFormData, setScannerFormData] = useState({});
+
 
     const [rooms, setRooms] = useState([]);
     const [lastAddedRoom, setLastAddedRoom] = useState('');
@@ -52,7 +57,6 @@ function AdminDashboard() {
         }));
         console.log(scannerFormData)
     }
-   
     async function createRoom(){
         const {data}  = await  axios.post('http://localhost:5000/room/createroom',{room:roomFormData})
         setLastAddedRoom(roomFormData);
@@ -60,22 +64,34 @@ function AdminDashboard() {
 
     }
     useEffect(() => {
-
+        let isMount = true;
         async function fetchRooms(){
             const {data} = await axios.get('http://localhost:5000/room/fetchrooms')
+            if(isMount){
             setRooms(data);
+            }
         }
         fetchRooms();
+        return ()=>{
+            isMount = false;
+        }
     },[lastAddedRoom])
 
     async function createScannerAccount(event){
         event.preventDefault();
         const {data} = await axios.post('http://localhost:5000/room/signup',scannerFormData);
-        console.log(data)     
+          
     }
-    
+    useEffect(() => {
+    },[session])
 
-
+    if(reportsNavState){
+        return <Redirect to='/admin/reports'/>
+    }
+    if(logsNavState){
+        return <Redirect to='/admin/logs'/>
+    }
+   
     return (
         JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Admin"  ? (
         <>
@@ -89,10 +105,10 @@ function AdminDashboard() {
                     </div>
                 </div>
                 <div className="db-menu">
-                    <div className="menu-selection bg1">
-                        <span>View Users</span>
+                    <div className="menu-selection bg1" onClick={()=>{setReportsNavState(true)}}>
+                        <span>View Reports</span>
                     </div>
-                    <div className="menu-selection bg1">
+                    <div className="menu-selection bg1" onClick={()=>{setLogsNavState(true)}}>
                         <span>View Logs</span>
                     </div>
                     <div className="menu-selection bg1" onClick={openCreateRoomForm}>

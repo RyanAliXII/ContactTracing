@@ -1,4 +1,4 @@
-import React, { useState,useContext,useEffect } from "react";
+import React, { useState,useContext,useEffect,useRef } from "react";
 import "../Assets/form.css";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
@@ -8,7 +8,7 @@ function Login({}) {
   
   const [formData, setFormData] = useState({});
   const [session,refetchSession] = useContext(AuthContext)
-
+  const invalidLoginRef = useRef();
   function handleFormData(event) {
     const { name, value } = event.target;
     setFormData((prevState) => ({
@@ -30,7 +30,7 @@ function Login({}) {
         refetchSession(prevState=> prevState + 1);
       } 
       else {
-        console.log(response.data)
+          invalidLoginRef.current.style.display = "inline"
       }
     } catch (error) {
       console.log(error)
@@ -44,6 +44,9 @@ function Login({}) {
             <span>Sign In</span>
           </div>
           <form className="form-form">
+          <span className="error-message warn" ref={invalidLoginRef}>
+                Invalid Username or Password
+              </span>
             <div className="input-wrapper">
               <label className="" htmlFor="email">
                 Email or Mobile Number
@@ -75,7 +78,7 @@ function Login({}) {
               <button
                 type="button"
                 onClick={sendFormData}
-                className="btn ok default-clr"
+                className="btn signin-btn ok default-clr"
               >
                 Sign In
             </button>

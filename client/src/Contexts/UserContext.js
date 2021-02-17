@@ -14,15 +14,19 @@ export const UserProvider = (props) => {
     });
    
     useEffect(() => {
-
+        let isMount = true;
         async function fetchUserData() {
             const { data } = await axios.post('http://localhost:5000/user', {}, { withCredentials: true });
             localStorage.setItem('userId',JSON.stringify({id:data.id}))
+            if(isMount){
             setUser(data);
+            }
         }
         fetchUserData();
         setLoading(false);
-        console.log("Session Checked")
+        return ()=>{
+            isMount = false;
+        }
     }, [session])
 
 

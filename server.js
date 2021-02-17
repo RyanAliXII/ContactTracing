@@ -4,8 +4,9 @@ const app = express();
 const PORT = process.env.PORT || 5500
 const PH_PROVINCES_CITIES = require('./routes/philippines/philippines');
 const loginSystem = require('./routes/LoginSystemRoute')
-const orgRoutes = require('./routes/OrgRoutes')
+const roomRoutes = require('./routes/RoomRoutes')
 const adminRoutes = require('./routes/AdminRoute')
+const clientRoutes = require('./routes/ClientRoute')
 const bodyParser = require('body-parser');
 const corsConfig = require('./routes/corsConfig')
 const cors = require('cors');
@@ -20,8 +21,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors(corsConfig));
 
-
-
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -34,15 +33,26 @@ app.use(session({
 app.get('/auth', (req, res) => {
 
     if (req.session.user === undefined) {
-        res.json({auth:false,role:"NONE"});
+        res.json({bool:false,role:"NONE"});
     }
     else {
-        res.json({auth:true,role:req.session.user.role})
+        res.json({bool:true,role:req.session.user.role})
     }
 })
 app.post('/user',(req,res)=>{
     const user = req.session.user;
+
+    if(user === undefined){
+        res.json({
+            name:"NULL",
+            qrCode:"NULL"
+        })
+    }
     res.json(user)
+})
+app.post('/logout',(req,res)=>{
+    req.session.destroy();
+    res.send('ok')
 })
 
 app.post('/fetchtoken', (req, res) => {
@@ -60,8 +70,9 @@ app.post('/fetchtoken', (req, res) => {
 
 app.use('/philippines', PH_PROVINCES_CITIES)
 app.use('/', loginSystem)
-app.use('/org',orgRoutes)
+app.use('/room',roomRoutes)
 app.use('/admin',adminRoutes)
+app.use('/client',clientRoutes)
 app.listen(process.env.PORT, () => {
     console.log("Server up and running: " + PORT);
 });

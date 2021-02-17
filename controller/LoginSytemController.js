@@ -16,7 +16,7 @@ module.exports = {
     signUp: async (req, res) => {
         try {
             const user = req.body;
-            Object.assign(user, { qrCode: uuidV4(),role:"Client"});
+            Object.assign(user, { qrCode: uuidV4(),role:"Client",travel_logs:[]});
             user.password = await bcrypt.hash(user.password, 10);
             const database = await dbUtils.connectToDB();
             database.collection("users").insertOne(user);
@@ -54,8 +54,6 @@ module.exports = {
                         role:databaseResult.role
                     }    
             
-           
-
                 if (isPasswordTheSame) {
         
                     req.session.user = user;

@@ -16,7 +16,7 @@ export const AuthProvider = (props) => {
         }
         validateAuth()
         setLoading(false)
-        console.log("CHECKED")
+       
     },[session])
     
     return (

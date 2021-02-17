@@ -4,6 +4,7 @@ import axios from 'axios';
 import {UserContext} from '../../Contexts/UserContext'
 import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import {AuthContext} from '../../Contexts/AuthContext'
+import {IoArrowBackCircleSharp} from 'react-icons/io5'
 function TravelLogs() {
 
     const [user,setUser] = useContext(UserContext)
@@ -11,31 +12,40 @@ function TravelLogs() {
     const [logsNavState,setLogsNavState] = useContext(LogsNavigationContext)
     const [lastReported,setLastReported] = useState({});
     const [travelLogs,setTravelLogs] = useState([])
+
     useEffect(()=>{
-        
+        let isMount = true;
         async function fetchTravelLogs(){
-            console.log(user);
+          
             try{
             const {data} = await axios.post('http://localhost:5000/client/fetchlogs',JSON.parse(localStorage.getItem('userId')));
-            
+            if(isMount){
             setTravelLogs(data);
+            }
 
             }catch (error) {
                 console.log(error)
             }
         }
-        
-        if(JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Client"){
-            fetchTravelLogs();
+        fetchTravelLogs();
+        return ()=>{
+            isMount = false;
         }
     },[lastReported])
 
-
+    if(!logsNavState){
+        return <Redirect to="/dashboard"/>
+    }
         return (
            JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Client" ? (
+           <>
+           <div className="back-buttons">
+                
+            </div>
             <div className="travel-logs">
                 <div className="title-wrapper">
-                    <span>Travel Logs</span>
+                    <span className="title-text">Travel Logs</span>
+                    <span className="back-btn" onClick={()=>{setLogsNavState(false)}}><IoArrowBackCircleSharp></IoArrowBackCircleSharp></span>
                 </div>
                 <div className="travel-logs-wrapper">
                     <ul className="travel-log-lists">
@@ -49,6 +59,7 @@ function TravelLogs() {
                     </ul>
                 </div>
             </div>
+            </>
          ): (<Redirect to="/"></Redirect>)
         );
     
@@ -69,7 +80,7 @@ function TravelLogList({ log,user,setLastReported}) {
             name:user.name,
             logId:log.id,
             location:log.location,
-            time:log.time
+            time:`${log.day}, ${log.time}, ${log.month}`
         }
         const {data} = await axios.post('http://localhost:5000/client/report',report)
         console.log(data);
@@ -78,10 +89,9 @@ function TravelLogList({ log,user,setLastReported}) {
     }
     return (
         !log.isReported ? (
-    
         <li className="travel-log-list bg1">
            <span className="location">{log.location}</span>
-           <span className="time">{log.time}</span>
+           <span className="time">{`${log.day}, ${log.time}, ${log.month}`}</span>
            <span className="not-me warn-bg default-clr" onClick={()=>{setReportModalClass('report-modal bg1')}}>Report</span>
            <div className={reportModalClass}>
                <div className="report-modal-header warn-bg">
@@ -100,7 +110,7 @@ function TravelLogList({ log,user,setLastReported}) {
         ) : (
             <li className="travel-log-list bg1">
             <span className="location">{log.location}</span>
-            <span className="time">{log.time}</span>
+            <span className="time">{`${log.day}, ${log.time}, ${log.month}`}</span>
             <span className="warn">Report had been sent.</span>
          </li>
         )

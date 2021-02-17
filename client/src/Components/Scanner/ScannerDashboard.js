@@ -1,6 +1,7 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect,useRef,useContext} from 'react';
 import QrReader from 'react-qr-scanner';
 import { Redirect } from 'react-router-dom'
+import  {AuthContext} from '../../Contexts/AuthContext'
 import axios from 'axios';
 
 
@@ -8,6 +9,7 @@ import axios from 'axios';
 
 function ScannerDashboard({  }) {
     const [findScan, setScan] = useState(false)
+    const [session,fetchSession] = useContext(AuthContext)
     const [user, setUser] = useState({
         room: "NONE"
     });
@@ -49,10 +51,13 @@ function ScannerDashboard({  }) {
         return () => {
             unmount = true
         }
-    }, []);
+    }, [session]);
+
+
+
         return (
             JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Scanner"  ? (
-            <div>
+            <div className="scanner-db">
                 <div className="scanner-info">
                     <span className="org">{user.room}</span><br></br>
                     <span className="username">{user.username}</span>
