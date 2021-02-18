@@ -6,6 +6,7 @@
 }
 body{
     font-family: 'Noto Sans JP', sans-serif;
+    scroll-behavior: smooth;
 }
 .bg1{
     background:#F4F0F0
@@ -43,6 +44,9 @@ body{
 .cancel{
 cursor: pointer;
 
+}
+.btn-font-size{
+    font-size:calc(1rem + 0.5vw)
 }
 .report-prompt{
     height: 10vh;

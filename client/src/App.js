@@ -10,6 +10,7 @@ import AdminLogin from './Components/Admin/AdminLogin'
 import TravelLogs from './Components/Client/TravelLogs'
 import Header from './Components/Header'
 import Reports from './Components/Admin/Reports'
+import Profile from './Components/Client/Profile'
 import './Assets/app.css'
 import './Assets/dashboard.css'
 import {AuthProvider} from './Contexts/AuthContext'
@@ -48,7 +49,9 @@ function App() {
           <TravelLogs >
           </TravelLogs>
         </Route>
-
+      <Route path="/dashboard/profile">
+        <Profile></Profile>
+      </Route>
         <Route path="/dashboard" >
           <Header></Header>
           <Dashboard></Dashboard>

@@ -51,7 +51,7 @@ module.exports = {
     }
     ,
     createReport:async(req,res)=>{
-
+        
         try{
 
             const day = moment().format('dddd').valueOf()
@@ -82,6 +82,39 @@ module.exports = {
            return res.send("SOMETHING BAD HAPPENED")
         }
 
+    },
+    updateGeneralInfo:async(req,res)=>{
+         
+        try{
+        const database = await dbUtils.connectToDB();
+        const userId = req.body.id;
+        const newData = {
+            fullname:req.body.fullname,
+            province:req.body.province,
+            city:req.body.city,
+            fullAddress:req.body.fullAddress,
+        }
+    const {value} =  await database.collection('users').findOneAndUpdate({_id:ObjectId(userId)},{$set:newData},{returnOriginal:false})
+    user = {
+        id: value._id,
+        name: value.fullname,
+        email:value.email,
+        mobileNumber:value.mobileNumber,
+        province:value.province,
+        city:value.city,
+        fullAddress:value.fullAddress,
+        qrCode:value.qrCode,
+        role:value.role
+    } 
+     
+       req.session.user = user;
+        return res.send("OK")
+    }
+    catch (error) {
+        console.log(error);
+       return res.send("BAD")
+        
+    }
     }
     
 }

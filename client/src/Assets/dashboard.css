@@ -233,6 +233,60 @@ overflow-y: scroll;
     height:1rem;
     font-size: 2rem;
 }
+.general-info{
+    padding:20px;
+    border-radius: 10px;
+    display: flex;
+}
+.important-info{
+    margin-top:10px;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    
+}
+.general-info span{
+    display:block;
+}
+.user-details label{
+    font-weight: 300;
+    font-size:0.7rem;
+    color:#8d918e;
+}
+.user-details span{
+    color:#4b4d4b;
+    font-size: calc(0.7rem + 0.5vw)
+}
+.inline{
+    display:inline !important;
+}
+.edit-wrapper{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content:flex-end;
+}
+.edit-wrapper span{
+    font-size: calc(1.2rem  + 1vw);
+    cursor:pointer;
+    color:#8d918e;
+}
+.info-wrapper{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.max{
+    max-width: 700px;
+}
+.profile-modal{
+    position:fixed;
+    width:100%;
+    top: 0;
+    left:50%;
+    transform:translate(-50%);
+    background:#FFFFFF;
+}
 @media only screen and (min-width:900px){
     .generate-btn, .signin-btn{
         font-size: calc(0.5rem + 0.7vw);

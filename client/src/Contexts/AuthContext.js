@@ -13,6 +13,7 @@ export const AuthProvider = (props) => {
         async function validateAuth(){
             const {data} = await axios.get('http://localhost:5000/Auth',{withCredentials:true});
             localStorage.setItem('auth',JSON.stringify(data))
+            console.log("CHECKING AUTH")
         }
         validateAuth()
         setLoading(false)
@@ -21,7 +22,9 @@ export const AuthProvider = (props) => {
     
     return (
             <AuthContext.Provider value={[session,refetchSession]}>
-                {!isLoading && props.children}
+                {
+                    !isLoading ? props.children : <></>
+                }
             </AuthContext.Provider>
     );
 };

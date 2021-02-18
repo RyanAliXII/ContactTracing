@@ -19,20 +19,26 @@ export const UserProvider = (props) => {
             const { data } = await axios.post('http://localhost:5000/user', {}, { withCredentials: true });
             localStorage.setItem('userId',JSON.stringify({id:data.id}))
             if(isMount){
+            console.log("FETCHING USER");
             setUser(data);
             }
         }
+        
         fetchUserData();
         setLoading(false);
+        console.log("OK")
         return ()=>{
             isMount = false;
+            console.log("UNMOUNT");
         }
     }, [session])
 
 
     return (
         <UserContext.Provider value={[user, setUser]}>
-            {!isLoading && props.children}
+            {
+                !isLoading ? (props.children):<></>
+            }
         </UserContext.Provider>
     );
 };

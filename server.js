@@ -41,7 +41,7 @@ app.get('/auth', (req, res) => {
 })
 app.post('/user',(req,res)=>{
     const user = req.session.user;
-
+    console.log(user);
     if(user === undefined){
         res.json({
             name:"NULL",
