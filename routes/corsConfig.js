@@ -1,5 +1,5 @@
 module.exports = {
     origin: 'http://localhost:3000',
-    METHOD: 'GET,POST,PATCH',
+    METHOD: 'GET,POST,PATCH,PUT',
     credentials:true
 }

@@ -1,4 +1,6 @@
 const dbUtils = require('./dbUtils')
+const { ObjectId } = require('mongodb');
+const bcrypt = require("bcrypt");
 module.exports = {
 
     isEmpty: (string,length) => string.length <= 0 ? true : false,
@@ -45,5 +47,25 @@ module.exports = {
             catch(error){
                 console.log(error);
             }
+    },
+    isPasswordTheSame: async (userId,password) => {
+        
+        try{
+            const database = await dbUtils.connectToDB();
+            const result = await database.collection('users').findOne({_id:ObjectId(userId)});
+            if(result == null){
+                return false;
+            }
+            else{
+                const isSame = await bcrypt.compare(
+                    password,
+                    result.password
+                );
+                return isSame;
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
 }

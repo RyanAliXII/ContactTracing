@@ -6,13 +6,13 @@ import HeroImg from '../../Assets/images/social_distance.svg'
 import {UserContext} from '../../Contexts/UserContext'
 import {AuthContext} from '../../Contexts/AuthContext'
 import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
-
+import {ProfileNavStateContext} from '../../Contexts/ProfileNavState'
 function Dashboard(props) {
 
     const [user,setUser] = useContext(UserContext)
     const [session,fetchSession] = useContext(AuthContext)
     const [logsNavState,setLogsNavState] = useContext(LogsNavigationContext)
-
+    const [profileNavState,setProfileNavState] = useContext(ProfileNavStateContext)
 
         async function generateQrCode(){
             try{
@@ -30,6 +30,9 @@ function Dashboard(props) {
         if(logsNavState){
             return <Redirect to="/dashboard/logs"></Redirect>
         }
+        if(profileNavState){
+            return <Redirect to="/dashboard/profile"></Redirect>
+        }
 
         return (
           JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Client" ? (
@@ -44,7 +47,7 @@ function Dashboard(props) {
                 </div>
                 <div className="db-menu">
                     <div className="menu-selection bg1" onClick={()=>{setLogsNavState(true)}}><span>View Travel logs</span></div>
-                    <div className="menu-selection bg1" ><span>My Profile</span></div>
+                    <div className="menu-selection bg1" onClick={()=>{setProfileNavState(true)}}><span>My Profile</span></div>
                 </div>
                 <div className="qr">
                     <span className="title">Scan Here</span>

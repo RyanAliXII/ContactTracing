@@ -7,7 +7,6 @@ const twilioClient = require("twilio")(accountSID, authToken);
 
 const validate = require("../utils/validate");
 const dbUtils = require("../utils/dbUtils");
-
 const jwt = require("jsonwebtoken");
 const { v4: uuidV4 } = require("uuid");
 const bcrypt = require("bcrypt");
@@ -27,13 +26,21 @@ module.exports = {
         } 
     },
     signIn: async (req, res) => {
-        const email = req.body.email;
+        const username  = req.body.username;
+        let query = {};
+        if(validate.isEmail(username)){
+            query = { email: username}
+        }
+        else{
+            query = { mobileNumber:username}
+        }
         const password = req.body.password;
+
         try {
             const database = await dbUtils.connectToDB();
             const databaseResult = await database
                 .collection("users")
-                .findOne({ email: email });
+                .findOne(query);
 
             if (databaseResult == null) {
                 res.send("Invalid Email");
@@ -92,6 +99,7 @@ module.exports = {
     },
 
     createVerification: async (req, res) => {
+        
         try {
             let mobileNumber = req.body.mobileNumber;
             mobileNumber = `+63${mobileNumber.substring(1, 11)}`;

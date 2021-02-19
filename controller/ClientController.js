@@ -2,6 +2,8 @@ const dbUtils = require('../utils/dbUtils')
 const { v4: uuidV4 } = require("uuid");
 const { ObjectId } = require('mongodb');
 const moment = require('moment');
+const bcrypt = require("bcrypt");
+const validate = require('../utils/validate')
 module.exports = {
 
     generateQRCode: async(req,res)=>{
@@ -115,6 +117,63 @@ module.exports = {
        return res.send("BAD")
         
     }
-    }
+    },
+    updateMobileNumber:async(req,res)=>{
+        try{
+     
+        const userId = req.body.id;
+        const mobileNumber = req.body.mobileNumber;
+        const database = await dbUtils.connectToDB();
+        console.log(req.body)
+        const {value} =  await database.collection('users').findOneAndUpdate({_id:ObjectId(userId)},{$set:{mobileNumber: mobileNumber}},{returnOriginal:false})
+        user = {
+            id: value._id,
+            name: value.fullname,
+            email:value.email,
+            mobileNumber:value.mobileNumber,
+            province:value.province,
+            city:value.city,
+            fullAddress:value.fullAddress,
+            qrCode:value.qrCode,
+            role:value.role
+        } 
+         
+        req.session.user = user;
+        
+        res.send("OK")
+        }catch (error) {
+            console.log(error)
+            res.send("ERROR")
+        }
+    },
+    validatePasswordIsSame:async(req,res)=>{
+        console.log(req.body)
+        const userId = req.body.id;
+        const password = req.body.password;
+        const bool = await validate.isPasswordTheSame(userId,password)
+        if(bool){
+            res.send("OK")
+        }
+        else{
+            res.send("BAD")
+        }
+    },
+    saveNewPassword:async (req,res)=>{
     
+        try{
+            const userId = req.body.id;
+            const password = await bcrypt.hash(req.body.password, 10);   
+            const database = await dbUtils.connectToDB();
+            database.collection('users').updateOne({_id:ObjectId(userId)},{$set:{password:password}});
+            return res.send("OK");
+        }catch(error){
+            console.log(error)
+            return res.send("BAD")
+            
+        }
+    
+        
+    
+    
+    }
 }

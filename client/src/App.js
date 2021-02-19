@@ -17,6 +17,7 @@ import {AuthProvider} from './Contexts/AuthContext'
 import {UserProvider} from './Contexts/UserContext'
 import {LogsNavigationProvider} from './Contexts/LogsNavigationContext'
 import {ReportsNavigationProvider} from './Contexts/ReportNavigationContext'
+import {ProfileNavStateProvider} from './Contexts/ProfileNavState'
 import Logs from './Components/Admin/Logs'
 import {
   BrowserRouter as Router,
@@ -39,6 +40,7 @@ function App() {
         <AuthProvider>
           <UserProvider>
         <LogsNavigationProvider>
+        <ProfileNavStateProvider>
         <Route path="/signin">
           <Login ></Login>
         </Route>
@@ -59,7 +61,7 @@ function App() {
 
         </Switch>
        
-        
+        </ProfileNavStateProvider>
         </LogsNavigationProvider>
 
         <Route path="/org/scanner">
