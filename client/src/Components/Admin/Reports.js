@@ -3,7 +3,7 @@ import axios from 'axios';
 import { IoArrowBackCircleSharp } from 'react-icons/io5'
 import { Redirect } from 'react-router-dom'
 import { ReportsNavigationContext } from '../../Contexts/ReportNavigationContext'
-function Reports(props) {
+function Reports({setLoadingClass}) {
 
     const [reports, setReports] = useState([]);
     const [reportsNavState, setReportsNavState] = useContext(ReportsNavigationContext);
@@ -11,8 +11,9 @@ function Reports(props) {
         let isMount = true;
 
         async function fetchReports() {
+            setLoadingClass('loading-wrapper')
             const { data } = await axios.post('http://localhost:5000/admin/reports', {})
-            console.log(data)
+            setLoadingClass('hide')
             if (isMount) {
                 setReports(data)
             }

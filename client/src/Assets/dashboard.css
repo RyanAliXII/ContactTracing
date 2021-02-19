@@ -138,6 +138,7 @@ overflow-y: scroll;
 .travel-log-list{
     width:95%;
     height: 15vh;
+    margin:auto;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -197,6 +198,10 @@ overflow-y: scroll;
     gap: 1rem;
     width:90% ;
     margin:50px auto;
+}
+.all-reports li{
+
+    width:95%;
 }
 .report-summary{
     font-size:calc(0.7rem + 1vw);
@@ -303,6 +308,17 @@ overflow-y: scroll;
     width:95%;
     margin: auto;
 }
+.fixed-pos{
+    top:10vh;
+    height:70vh;
+}
+.fixed-pos-smol{ 
+    height:50vh;
+}
+.reports .title-wrapper{
+    width:90%;
+    margin: auto;
+}
 @media only screen and (min-width:900px){
     .generate-btn, .signin-btn{
         font-size: calc(0.5rem + 0.7vw);
@@ -357,5 +373,11 @@ overflow-y: scroll;
         left:50%;
         transform:translate(-50%);
         background:#FFFFFF;
+    }
+    .reports{
+        width:80%;
+        margin: auto;
+        border: 1px solid #dbdbd9;
+        height:100vh;
     }
 }

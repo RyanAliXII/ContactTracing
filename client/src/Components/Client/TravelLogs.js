@@ -5,7 +5,7 @@ import {UserContext} from '../../Contexts/UserContext'
 import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import {AuthContext} from '../../Contexts/AuthContext'
 import {IoArrowBackCircleSharp} from 'react-icons/io5'
-function TravelLogs() {
+function TravelLogs({setLoadingClass}) {
 
     const [user,setUser] = useContext(UserContext)
     const [session,fetchSession] = useContext(AuthContext)
@@ -16,9 +16,10 @@ function TravelLogs() {
     useEffect(()=>{
         let isMount = true;
         async function fetchTravelLogs(){
-          
+            setLoadingClass('loading-wrapper')
             try{
             const {data} = await axios.post('http://localhost:5000/client/fetchlogs',JSON.parse(localStorage.getItem('userId')));
+            setLoadingClass('hide loading-wrapper')
             if(isMount){
             setTravelLogs(data);
             }
@@ -28,6 +29,7 @@ function TravelLogs() {
             }
         }
         fetchTravelLogs();
+      
         return ()=>{
             isMount = false;
         }

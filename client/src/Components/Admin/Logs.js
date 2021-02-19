@@ -6,7 +6,7 @@ import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
 
-function Logs(props) {
+function Logs({setLoadingClass}) {
     const [travelLogs,setTravelLogs] = useState([])
     const [logsNavState,setLogsNavState] = useContext(LogsNavigationContext)
     const [rooms,setRooms] = useState([])
@@ -17,8 +17,10 @@ function Logs(props) {
            
             let isMount = true;
             async function fetchAllLogs(){
+                setLoadingClass('loading-wrapper')
                 try{
                 const {data} = await axios.post('http://localhost:5000/admin/logs',{})
+                setLoadingClass('hide')
                 if(isMount){
                 setTravelLogs(data)
                 }

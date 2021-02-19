@@ -7,7 +7,8 @@ import {UserContext} from '../../Contexts/UserContext'
 import {AuthContext} from '../../Contexts/AuthContext'
 import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import {ProfileNavStateContext} from '../../Contexts/ProfileNavState'
-function Dashboard(props) {
+
+function Dashboard({setLoadingClass}) {
 
     const [user,setUser] = useContext(UserContext)
     const [session,fetchSession] = useContext(AuthContext)
@@ -15,8 +16,10 @@ function Dashboard(props) {
     const [profileNavState,setProfileNavState] = useContext(ProfileNavStateContext)
 
         async function generateQrCode(){
+            setLoadingClass('loading-wrapper')
             try{
             const {data} = await axios.post('http://localhost:5000/client/generateQR',{id:user.id},{withCredentials: true})
+            setLoadingClass('hide')
             if(data === "OK"){
                 fetchSession(prevState => prevState + 1);
             } 

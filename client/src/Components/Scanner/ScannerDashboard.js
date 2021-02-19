@@ -29,8 +29,11 @@ function ScannerDashboard({  }) {
         if(data === "OK"){
             scannerMessageRef.current.innerText= "QR CODE SUCCESSFULLY SCANNED"
             setTimeout(()=>{
-                setScan(false);
-                scannerMessageRef.current.innerText= "Ready to Scan Again"
+                if(window.location.pathname === '/org/Scanner'){
+                    setScan(false);
+                    scannerMessageRef.current.innerText= "Ready to Scan Again"
+                }
+                
             },3000)
         }
     }

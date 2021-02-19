@@ -1,4 +1,5 @@
 
+import {useState} from 'react'
 import Home from './Components/Home';
 import Login from './Components/Login';
 import Register from './Components/Client/Register/Register';
@@ -19,6 +20,7 @@ import {LogsNavigationProvider} from './Contexts/LogsNavigationContext'
 import {ReportsNavigationProvider} from './Contexts/ReportNavigationContext'
 import {ProfileNavStateProvider} from './Contexts/ProfileNavState'
 import Logs from './Components/Admin/Logs'
+import Loading from './Components/Loading'
 import {
   BrowserRouter as Router,
   Route,
@@ -27,14 +29,12 @@ import {
 
 
 function App() {
-
-
-
+  const [loadingClass,setLoadingClass] = useState('hide')
   return (
     <>
 
       <Router>
-     
+      <Loading Class={loadingClass}></Loading>
         <Route path="/" exact={true} component={Home}></Route>
 
         <AuthProvider>
@@ -48,7 +48,7 @@ function App() {
         <Switch>
           
         <Route path="/dashboard/logs">
-          <TravelLogs >
+          <TravelLogs setLoadingClass = {setLoadingClass}>
           </TravelLogs>
         </Route>
       <Route path="/dashboard/profile">
@@ -56,7 +56,7 @@ function App() {
       </Route>
         <Route path="/dashboard" >
           <Header></Header>
-          <Dashboard></Dashboard>
+          <Dashboard setLoadingClass={setLoadingClass}></Dashboard>
         </Route>
 
         </Switch>
@@ -82,22 +82,18 @@ function App() {
       <ReportsNavigationProvider>
       <LogsNavigationProvider>   
       <Route path="/admin/reports">
-            <Reports></Reports>
+            <Reports setLoadingClass={setLoadingClass}></Reports>
           </Route>
       <Route path="/admin/dashboard">
           <Header></Header>
           <AdminDashboard>
           </AdminDashboard>
           </Route>
-      <Route path="/admin/logs">
-          <Logs></Logs>
+      <Route path="/admin/logs" >
+          <Logs setLoadingClass={setLoadingClass}></Logs>
         </Route>  
         </LogsNavigationProvider>  
        </ReportsNavigationProvider>
-         
-    
-      
-     
           </UserProvider>
         </AuthProvider>
 
@@ -105,6 +101,7 @@ function App() {
           <Register></Register>
         </Route>
       </Router>
+
     </>
   );
 }
