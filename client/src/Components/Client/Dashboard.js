@@ -44,6 +44,7 @@ function Dashboard(props) {
                 </div>
                 <div className="db-menu">
                     <div className="menu-selection bg1" onClick={()=>{setLogsNavState(true)}}><span>View Travel logs</span></div>
+                    <div className="menu-selection bg1" ><span>My Profile</span></div>
                 </div>
                 <div className="qr">
                     <span className="title">Scan Here</span>

@@ -48,7 +48,7 @@
 }
 .qr{
     height: 60vh;
-   
+   margin-top: 10vh;
     text-align: center;
     
 }
@@ -281,11 +281,27 @@ overflow-y: scroll;
 }
 .profile-modal{
     position:fixed;
-    width:100%;
+    width: 100%;
+    height: 100vh;
     top: 0;
     left:50%;
     transform:translate(-50%);
     background:#FFFFFF;
+}
+.modal-height{
+    height:100vh;
+
+}
+
+.profile-wrapper{
+
+    width:90%;
+    height:100vh;
+    margin: auto;
+}
+.user-details{
+    width:95%;
+    margin: auto;
 }
 @media only screen and (min-width:900px){
     .generate-btn, .signin-btn{
@@ -317,5 +333,29 @@ overflow-y: scroll;
         font-weight: 300;
         font-size:calc(0.2rem + 0.7vw);
         max-width:30ch;
+    }
+    .dashboard{
+        max-width: 700px;
+        height: 140vh;
+        margin:auto;
+        border: 1px solid #dbdbd9;
+    }
+    .travel-logs{
+        margin: auto;
+        width:85%;
+        border: 1px solid #dbdbd9;
+        max-width:700px;
+    }
+    .profile{
+        height:100vh;
+     }
+     .profile-modal{
+        position:fixed;
+        width: 50% ;
+        top: 0;
+        border: 1px solid #dbdbd9;
+        left:50%;
+        transform:translate(-50%);
+        background:#FFFFFF;
     }
 }

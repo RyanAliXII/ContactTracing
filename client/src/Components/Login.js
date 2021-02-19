@@ -53,7 +53,7 @@ function Login({}) {
             </label>
               <input
                 type="email"
-                name="email"
+                name="username"
                 className="input signin-input bg1"
                 onChange={handleFormData}
                 required

@@ -161,3 +161,20 @@ input[type=number] {
 .add-height{
     height: 65vh;
 }
+@media only screen and (min-width:1200px){
+    .sign-in,.sign-up{
+        width:100%;
+        margin:auto;
+        max-width:700px;
+        border: 1px solid #dbdbd9;
+        height:100vh;
+    }
+    .form-wrapper{
+        width:80%;
+        margin:10vh auto;
+        height: 10vh;  
+    }
+    .steps{
+        margin:5vh auto;
+    }
+}

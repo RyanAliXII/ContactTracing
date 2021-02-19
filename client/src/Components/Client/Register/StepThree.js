@@ -31,7 +31,6 @@ function StepThree({formData,showValid,incrementSteps}) {
                 OUTLINE:'2px solid #db5248', 
                 DISPLAY:"inline"
             }
-            console.log(messageTextRef.current);
             if(Array.isArray(inputs)){
                 inputs.forEach(input => { 
                   input.style.outline = INVALID.OUTLINE //MAKE EVERY ELEMENT OUTLINE RED

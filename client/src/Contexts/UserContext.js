@@ -10,7 +10,8 @@ export const UserProvider = (props) => {
     const [session, fetchSession] = useContext(AuthContext);
     const [user, setUser] = useState({
         name: "NULL",
-        qrCode: "NULL"
+        qrCode: "NULL",
+        fullAddress:" "
     });
    
     useEffect(() => {
@@ -19,7 +20,7 @@ export const UserProvider = (props) => {
             const { data } = await axios.post('http://localhost:5000/user', {}, { withCredentials: true });
             localStorage.setItem('userId',JSON.stringify({id:data.id}))
             if(isMount){
-            console.log("FETCHING USER");
+          
             setUser(data);
             }
         }
@@ -29,7 +30,6 @@ export const UserProvider = (props) => {
         console.log("OK")
         return ()=>{
             isMount = false;
-            console.log("UNMOUNT");
         }
     }, [session])
 
