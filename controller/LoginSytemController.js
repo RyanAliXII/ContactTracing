@@ -79,6 +79,7 @@ module.exports = {
     },
 
     verify: async (req, res) => {
+        console.log(req.body)
         try {
             let mobileNumber = req.body.mobileNumber;
             mobileNumber = `+63${mobileNumber.substring(1, 11)}`;
@@ -99,13 +100,14 @@ module.exports = {
     },
 
     createVerification: async (req, res) => {
-        
+        console.log(req.body)
         try {
             let mobileNumber = req.body.mobileNumber;
             mobileNumber = `+63${mobileNumber.substring(1, 11)}`;
-            await twilioClient.verify
+           const data = await twilioClient.verify
                 .services(serviceId)
                 .verifications.create({ to: mobileNumber, channel: "sms" });
+                console.log(data);
                 res.send("OK")
         } catch (error) {
             console.log(error)

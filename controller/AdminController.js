@@ -68,7 +68,7 @@ module.exports = {
     }
     },
     fetchTravelLogs: async (req, res) => {
-        //http://localhost:5000/admin/logs/Feb 16th 21/Room 201
+        
         try{
         const database = await dbUtils.connectToDB();
         const dbResults = await database.collection('users').find({role:"Client"}).toArray();
