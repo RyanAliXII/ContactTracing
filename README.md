@@ -4,28 +4,28 @@ Created using **MongoDB, Express, React and Node JS**
 
 ## Description
 
-This is my self-project made using MERN Stack. Originally, The scope of this project was national level but, I turned down the scope into school campus use. That is why there is some inconsistencies on the code, but I gave all my best to make it clean as much as possible. The reason for turning down the scope is because i am solo developer and i did not much have time because of school works. 
+This is my self-project made using MERN Stack. Originally, The scope of this project was national level but, I turned down the scope into school campus use. That is why there is some inconsistencies on the code, but I gave all my best to make it clean as much as possible. The reason for turning down the scope is because i am solo developer and i did not much have time because of school works.
 
 ## How to Run
 
 1. Run the following `git clone https://github.com/PusangMaySaging/ContactTracing.git` or download as ZIP.
 2. Run `npm run serve` on parent folder and `npm run start` in client folder.
-3. Enjoy 	❤️ :heart:
+3. Enjoy :heart:
 
 ## Features
 
 The users are consisted of **Client, Admin and Room Account**
  
-###  Client 
+### Client 
 
 - **Register and Sign In**
 - **Generate New QR Code**
 - **View Travel Logs**
-- ** Edit Profile**
+- **Edit Profile**
 
 ### Administrator
 
-- **View Reports** 
+- **View Reports**
 - **View Client Travel Logs with Filters**
 - **Create Room and Room Account**
 
