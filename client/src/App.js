@@ -21,6 +21,7 @@ import {ReportsNavigationProvider} from './Contexts/ReportNavigationContext'
 import {ProfileNavStateProvider} from './Contexts/ProfileNavState'
 import Logs from './Components/Admin/Logs'
 import Loading from './Components/Loading'
+import NotFound from './Components/NotFound'
 import {
   BrowserRouter as Router,
   Route,
@@ -35,15 +36,24 @@ function App() {
 
       <Router>
       <Loading Class={loadingClass}></Loading>
-        <Route path="/" exact={true} component={Home}></Route>
+     <Switch>
 
         <AuthProvider>
           <UserProvider>
         <LogsNavigationProvider>
         <ProfileNavStateProvider>
+        
+        <Switch>
         <Route path="/signin">
           <Login ></Login>
         </Route>
+     <Route path="/signup">
+          <Register></Register>
+        </Route>
+      <Route path="/" exact component={Home}></Route>
+
+        </Switch>
+
 
         <Switch>
           
@@ -63,43 +73,49 @@ function App() {
        
         </ProfileNavStateProvider>
         </LogsNavigationProvider>
-
+    <Switch>
         <Route path="/org/scanner">
           <Header></Header>
           <Scanner >
           </Scanner>
         </Route>
-        <Route path="/org" exact>
+        <Route path="/org" >
           <ScannerLogin >
           </ScannerLogin>
         </Route>
-
-   
-      <Route path="/admin" exact>
-          <AdminLogin>
-          </AdminLogin>
-          </Route>
+      </Switch>
+    <Switch>
+      
       <ReportsNavigationProvider>
       <LogsNavigationProvider>   
+
       <Route path="/admin/reports">
             <Reports setLoadingClass={setLoadingClass}></Reports>
           </Route>
+
       <Route path="/admin/dashboard">
           <Header></Header>
           <AdminDashboard>
           </AdminDashboard>
           </Route>
+
       <Route path="/admin/logs" >
           <Logs setLoadingClass={setLoadingClass}></Logs>
         </Route>  
+
+        <Route path="/admin">
+          <AdminLogin>
+          </AdminLogin>
+          </Route>
+
         </LogsNavigationProvider>  
        </ReportsNavigationProvider>
+       </Switch>
           </UserProvider>
         </AuthProvider>
+        
+  </Switch>
 
-        <Route path="/signup">
-          <Register></Register>
-        </Route>
       </Router>
 
     </>

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import cors from '../../../cors'
 function StepOne({ handleFormData, incrementSteps, showValid, showInvalid }) {
   const [isFormInValidState, setFormValidState] = useState({
     email: false,
@@ -71,7 +71,7 @@ function StepOne({ handleFormData, incrementSteps, showValid, showInvalid }) {
         email: true,
       }));
       const response = await axios.post(
-        "http://localhost:5000/validateEmailIfTaken",
+        `${cors.domain}/validateEmailIfTaken`,
         { email: email }
       );
       if (response.data) {
@@ -97,7 +97,7 @@ function StepOne({ handleFormData, incrementSteps, showValid, showInvalid }) {
     <div>
       <div className="sign-up">
         <ol className="steps">
-          <li className="stepOne active">1. Account</li>
+          <li className="stepOne blue-bg default-clr active">1. Account</li>
           <li className="stepTwo">2. Information</li>
           <li className="stepThree">3. Confirmation</li>
         </ol>
@@ -169,7 +169,7 @@ function StepOne({ handleFormData, incrementSteps, showValid, showInvalid }) {
             <div className="btn-wrapper">
               <button
                 type="submit"
-                className="btn bl-bg default-clr"
+                className="btn blue-bg default-clr"
                 onClick={proceedToStepTwo}
               >
                 Next

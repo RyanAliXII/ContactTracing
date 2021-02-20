@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, } from 'react';
 import axios from 'axios';
-
+import cors from  '../../../cors'
 
 function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInvalid }) {
 
@@ -14,7 +14,7 @@ function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInva
     useEffect(() => {
         //fetch provinces and fill <Select> with <option> of provinces
         async function getProvinces() {
-            const data = await axios.get('http://localhost:5000/philippines/provinces')
+            const data = await axios.get(`${cors.domain}/philippines/provinces`)
             return data;
         }
         getProvinces().then(response => {
@@ -26,7 +26,7 @@ function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInva
         //if province is selected fill <Select> with <option> of cities
         let provinceName = event.target.value;
         async function getCities() {
-            const response = await axios.get(`http://localhost:5000/philippines/provinces/cities/${provinceName}`)
+            const response = await axios.get(`${cors.domain}/philippines/provinces/cities/${provinceName}`)
             setCities(response.data)
             handleFormData(event)
         }
@@ -41,7 +41,7 @@ function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInva
         if (mobileNumber.match(mobileRegexPattern)) {
             showValid(event, invalidMobileNumberErrorRef)
             setValidMobileNumber(true);
-            const response = await axios.post('http://localhost:5000/validateMobileNumberIfTaken', { mobileNumber: mobileNumber })
+            const response = await axios.post(`${cors.domain}/validateMobileNumberIfTaken`, { mobileNumber: mobileNumber })
             if (response.data) {
                 showInvalid(event, mobileNumberTakenRef)
             }
@@ -60,7 +60,7 @@ function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInva
         }
     }
 
-    function proceedToStepThree(event) {
+    async function proceedToStepThree(event) {
         event.preventDefault();
         if (isValidMobileNumber
             && isNotEmpty(formData.fullname)
@@ -68,7 +68,8 @@ function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInva
             && isNotEmpty(formData.city)
             && isNotEmpty(formData.fullAddress)
         ) {
-            axios.post('http://localhost:5000/createVerification', { mobileNumber: formData.mobileNumber });
+            const {data} = await axios.post(`${cors.domain}/createVerification`, { mobileNumber: formData.mobileNumber });
+            console.log(data)
             incrementSteps()
         }
     }
@@ -78,10 +79,10 @@ function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInva
 
     return (
         <div>
-            <div className="sign-up">
+            <div className="sign-up form-height">
                 <ol className="steps">
                     <li className="stepOne">1. Account</li>
-                    <li className="stepTwo active">2. Information</li>
+                    <li className="stepTwo blue-bg default-clr active">2. Information</li>
                     <li className="stepThree">3. Confirmation</li>
                 </ol>
                 <div className="form-wrapper">
@@ -127,7 +128,7 @@ function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInva
                             <textarea className="bg1" onChange={handleFormData} name="fullAddress"></textarea>
                         </div>
                         <div className="btn-wrapper">
-                            <button type="submit" className="btn bl-bg default-clr" onClick={proceedToStepThree}>Next</button>
+                            <button type="submit" className="btn blue-bg default-clr" onClick={proceedToStepThree}>Next</button>
                         </div>
                         <div className="btn-wrapper">
                         </div>

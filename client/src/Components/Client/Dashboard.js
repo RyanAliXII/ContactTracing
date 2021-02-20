@@ -7,7 +7,7 @@ import {UserContext} from '../../Contexts/UserContext'
 import {AuthContext} from '../../Contexts/AuthContext'
 import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import {ProfileNavStateContext} from '../../Contexts/ProfileNavState'
-
+import cors from '../../cors'
 function Dashboard({setLoadingClass}) {
 
     const [user,setUser] = useContext(UserContext)
@@ -18,7 +18,7 @@ function Dashboard({setLoadingClass}) {
         async function generateQrCode(){
             setLoadingClass('loading-wrapper')
             try{
-            const {data} = await axios.post('http://localhost:5000/client/generateQR',{id:user.id},{withCredentials: true})
+            const {data} = await axios.post(`${cors.domain}/client/generateQR`,{id:user.id},{withCredentials: true})
             setLoadingClass('hide')
             if(data === "OK"){
                 fetchSession(prevState => prevState + 1);
@@ -57,8 +57,8 @@ function Dashboard({setLoadingClass}) {
                     <div className="qr-code">
                     <QRCode value={user.qrCode} size={190}/>
                     </div>
-                 <div className="desc-wrapper"> <span className="desc-text">You can screenshot the QR code if you are going out without internet connection. Just make sure you won’t share it with others.</span></div>  
-                 <div className="generate"><button type="button" onClick={generateQrCode} className="generate-btn bl-bg default-clr btn" >Generate New QR Code</button></div>  
+                 <div className="desc-wrapper"> <span className="desc-text ">You can screenshot the QR code if you are going out without internet connection. Just make sure you won’t share it with others.</span></div>  
+                 <div className="generate"><button type="button" onClick={generateQrCode} className="generate-btn blue-bg default-clr btn" >Generate New QR Code</button></div>  
                 </div>
                 <div className="create-org">
                     

@@ -6,6 +6,7 @@ import { UserContext } from '../../Contexts/UserContext'
 import { AuthContext } from '../../Contexts/AuthContext'
 import axios from 'axios'
 import {ProfileNavStateContext} from '../../Contexts/ProfileNavState'
+import cors from '../../cors'
 
 function showValid(inputs, messageTextRef) {
     const VALID = {
@@ -57,7 +58,7 @@ function Profile() {
             <div className="travel-logs profile">
                 <div className="title-wrapper">
                     <span className="title-text">Profile</span>
-                    <span className="back-btn" onClick={()=>{setProfileNavState(false)}}><IoArrowBackCircleSharp></IoArrowBackCircleSharp></span>
+                    <span className="back-btn blue-clr" onClick={()=>{setProfileNavState(false)}}><IoArrowBackCircleSharp></IoArrowBackCircleSharp></span>
                 </div>
                 <div className="user-details">
                     <div className="general-info bg1">
@@ -129,7 +130,7 @@ function GeneralInfoModal({ Class, setGeneralInfoModal, fetchSession, user }) {
     }
     async function submitUpdate(e) {
         e.preventDefault()
-        const { data } = await axios.patch('http://localhost:5000/client/updategeneral', formData, { withCredentials: true });
+        const { data } = await axios.patch(`${cors.domain}/client/updategeneral`, formData, { withCredentials: true });
         hide();
         fetchSession(prevState => prevState + 1)
     }
@@ -139,7 +140,7 @@ function GeneralInfoModal({ Class, setGeneralInfoModal, fetchSession, user }) {
     useEffect(() => {
 
         async function getProvinces() {
-            const data = await axios.get('http://localhost:5000/philippines/provinces')
+            const data = await axios.get(`${cors.domain}/philippines/provinces`)
             return data;
         }
         getProvinces().then(response => {
@@ -151,7 +152,7 @@ function GeneralInfoModal({ Class, setGeneralInfoModal, fetchSession, user }) {
 
         let provinceName = event.target.value;
         async function getCities() {
-            const response = await axios.get(`http://localhost:5000/philippines/provinces/cities/${provinceName}`)
+            const response = await axios.get(`${cors.domain}/philippines/provinces/cities/${provinceName}`)
             setCities(response.data)
             handleFormData(event)
         }
@@ -216,7 +217,7 @@ function GeneralInfoModal({ Class, setGeneralInfoModal, fetchSession, user }) {
                         name="fullAddress" required></textarea>
                 </div>
                 <div className="btn-wrapper org-btn-wrapper">
-                    <button type="submit" className="btn bl-bg default-clr btn-font-size">Save</button>
+                    <button type="submit" className="btn blue-bg default-clr btn-font-size">Save</button>
                     <button type="button"
                         onClick={hide}
                         className="btn bg1 btn-font-size"
@@ -251,7 +252,7 @@ function MobilePhoneModal({ user, fetchSession, setMobileInfoModal, mobileInfoMo
         if (mobileNumber.match(mobileRegexPattern)) {
             setValidMobileNumber(true);
             showValid(event, invalidMobileNumberErrorRef)
-            const response = await axios.post('http://localhost:5000/validateMobileNumberIfTaken', { mobileNumber: mobileNumber })
+            const response = await axios.post(`${cors.domain}/validateMobileNumberIfTaken`, { mobileNumber: mobileNumber })
             if (response.data) {
                 showInvalid(event, invalidMobileNumberErrorRef)
             }
@@ -282,7 +283,7 @@ function MobilePhoneModal({ user, fetchSession, setMobileInfoModal, mobileInfoMo
 
         if (isValidMobileNumber) {
             console.log(newMobileNumber);
-            const { data } = await axios.post('http://localhost:5000/createVerification', { mobileNumber: newMobileNumber });
+            const { data } = await axios.post(`${cors.domain}/createVerification`, { mobileNumber: newMobileNumber });
             console.log(data);
             setStep(prevState => prevState + 1)
 
@@ -306,9 +307,9 @@ function MobilePhoneModal({ user, fetchSession, setMobileInfoModal, mobileInfoMo
     }
     async function submitCode(event) {
         event.preventDefault()
-        axios.post('http://localhost:5000/verify', { code: code, mobileNumber: newMobileNumber }).then(async (resp) => {
+        axios.post(`${cors.domain}/verify`, { code: code, mobileNumber: newMobileNumber }).then(async (resp) => {
             if (resp.data === "VERIFIED") {
-                const { data } = await axios.put('http://localhost:5000/client/newmobile', { id: user.id, mobileNumber: newMobileNumber }, { withCredentials: true })
+                const { data } = await axios.put(`${cors.domain}/client/newmobile`, { id: user.id, mobileNumber: newMobileNumber }, { withCredentials: true })
                 fetchSession(prevState => prevState + 1)
                 hide()
             }
@@ -348,7 +349,7 @@ function MobilePhoneModal({ user, fetchSession, setMobileInfoModal, mobileInfoMo
 
                     <div className="btn-wrapper org-btn-wrapper">
                         <button type="button"
-                            className="btn bl-bg default-clr btn-font-size"
+                            className="btn blue-bg default-clr btn-font-size"
                             onClick={submitNewMobileNumber}
                         >Next</button>
                         <button type="button"
@@ -378,7 +379,7 @@ function MobilePhoneModal({ user, fetchSession, setMobileInfoModal, mobileInfoMo
                         </div>
 
                         <div className="btn-wrapper org-btn-wrapper">
-                            <button type="submit" className="btn bl-bg default-clr btn-font-size">Confirm</button>
+                            <button type="submit" className="btn blue-bg default-clr btn-font-size">Confirm</button>
                             <button type="button"
                                 className="btn bg1 btn-font-size"
                                 onClick={hide}
@@ -437,7 +438,7 @@ function PasswordModal({ Class, setPasswordInfoModal, user }) {
     }
 
     async function CheckPasswordIsCorrect(event) {
-        const { data } = await axios.post('http://localhost:5000/client/password', { id: user.id, password: oldPassword })
+        const { data } = await axios.post(`${cors.domain}/client/password`, { id: user.id, password: oldPassword })
         if (data === "OK") {
             setValidPasswords(prevState => ({ ...prevState, isOldPasswordCorrect: true }))
             showValid(event, incorrectOldPasswordRef)
@@ -451,8 +452,10 @@ function PasswordModal({ Class, setPasswordInfoModal, user }) {
     async function submitNewPassword(e) {
         e.preventDefault();
         if (isValidPasswords.isNewPasswordValid && isValidPasswords.isOldPasswordCorrect) {
-            const { data } = await axios.post('http://localhost:5000/client/savepassword', { id: user.id, password: newPassword })
-            console.log(data);
+            const { data } = await axios.post(`${cors.domain}/client/savepassword`, { id: user.id, password: newPassword })
+            if(data === "OK") {
+                hide();
+            }
         }
     }
 
@@ -497,7 +500,7 @@ function PasswordModal({ Class, setPasswordInfoModal, user }) {
                         required></input>
                 </div>
                 <div className="btn-wrapper org-btn-wrapper">
-                    <button type="submit" className="btn bl-bg default-clr btn-font-size">Save</button>
+                    <button type="submit" className="btn blue-bg default-clr btn-font-size">Save</button>
                     <button type="button"
                         onClick={hide}
                         className="btn bg1 btn-font-size"

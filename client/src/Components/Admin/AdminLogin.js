@@ -2,7 +2,7 @@ import React, { useState,useContext,useRef} from "react";
 import { Redirect } from "react-router-dom";
 import {AuthContext} from '../../Contexts/AuthContext'
 import axios from "axios";
-
+import cors from "../../cors"
 
 function AdminLogin() {
   
@@ -19,10 +19,10 @@ function AdminLogin() {
   async function sendFormData() {
     try {
        
-      const response = await axios.post("http://localhost:5000/admin/signin", formData, {
+      const response = await axios.post(`${cors.domain}/admin/signin`, formData, {
         headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Content-Type": "application/json"
+          //"Access-Control-Allow-Origin": "http://localhost:3000",
         },
         withCredentials: true,
       });
@@ -77,7 +77,7 @@ function AdminLogin() {
               <button
                 type="button"
                 onClick={sendFormData}
-                className="btn ok default-clr"
+                className="btn blue-bg default-clr"
               >
                 Sign In
             </button>

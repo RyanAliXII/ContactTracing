@@ -5,7 +5,7 @@ import {IoArrowBackCircleSharp} from 'react-icons/io5'
 import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
-
+import cors from '../../cors'
 function Logs({setLoadingClass}) {
     const [travelLogs,setTravelLogs] = useState([])
     const [logsNavState,setLogsNavState] = useContext(LogsNavigationContext)
@@ -19,7 +19,7 @@ function Logs({setLoadingClass}) {
             async function fetchAllLogs(){
                 setLoadingClass('loading-wrapper')
                 try{
-                const {data} = await axios.post('http://localhost:5000/admin/logs',{})
+                const {data} = await axios.post(`${cors.domain}/admin/logs`,{})
                 setLoadingClass('hide')
                 if(isMount){
                 setTravelLogs(data)
@@ -29,7 +29,7 @@ function Logs({setLoadingClass}) {
                 }
             }
             async function fetchRooms(){
-                const {data} = await axios.get('http://localhost:5000/room/fetchrooms')
+                const {data} = await axios.get(`${cors.domain}/room/fetchrooms`)
                 if(isMount){
                 setRooms(data);
                 }
@@ -44,7 +44,7 @@ function Logs({setLoadingClass}) {
         
         useEffect(() => {
             async function fetchFilteredLogs(){
-                const {data} = await axios.post(`http://localhost:5000/admin/logs/${dateFilter}/${selectedRoom}`,{});
+                const {data} = await axios.post(`${cors.domain}/admin/logs/${dateFilter}/${selectedRoom}`,{});
                 if(data.length > 0){
                 setTravelLogs(data)
                 }

@@ -1,0 +1,139 @@
+.home-header{
+    height: 10vh;
+    max-height: 80px;
+    min-height:60px;
+    display: flex;
+    align-items: center;
+    width:90%;
+    margin:auto;
+  
+}
+.home-header span{
+    font-size: calc(1.4rem  + 1vw);
+}
+.home-texts{
+    margin: 5vh auto;
+    width:90%;
+}
+.section-1{
+}
+.CTA{
+    width:90%;
+    margin: auto;
+    display: flex;
+    height:20vh;
+    flex-direction: column;
+    align-items: center;
+    gap:1rem;
+}
+.CTA a{
+    text-decoration:none;
+    padding:10px;
+    width:80%;
+    text-align: center;
+    border-radius:10px;
+    font-size: 1.2rem;
+    max-width: 300px;
+}
+.cta-border{
+    border: 1px solid #2F72FF
+    
+}
+.home-title{
+    height:10vh;
+    display: flex;
+    align-items: center;
+    font-size: calc(1.2rem + 1vw);
+    font-weight: 500;
+}
+.home-subtitle,.CTA a{
+    font-weight: 300;
+}
+.home-subtitle{
+    max-width: 40ch;
+}
+.section-2{
+    height:45vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+.section-2 img{
+    width:100%;
+    object-fit: cover;
+   
+}
+.illustration{
+    display:none;
+}  
+@media only screen and (min-width:810px){
+    .home-title{
+        height:10vh;
+        font-size: calc(1.2rem + 1vw);
+        font-weight: 500;
+    }
+    .home{
+        display:flex;
+        height:90vh;
+    }
+    .section-1{
+        display: flex;
+        align-items: center;
+        justify-content:flex-end;
+        width:60%;
+  
+    }
+    .section-2{
+        height:45vh;
+    
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        background:url('../Assets/images/Desktop.svg');
+        background-repeat: no-repeat !important;
+        background-size: cover;
+        width:80%;
+        display: flex;
+        justify-content:flex-end !important;
+      
+        
+    }
+    .home-subtitle{
+        max-width: 35ch;
+    }
+    .CTA{
+        height:10vh !important;
+        flex-direction: row;
+    }
+
+    .home-header{
+        height: 10vh;
+        max-height: 80px;
+        min-height:60px;
+        display: flex;
+        align-items: center;
+        background:white;
+        width:40%;
+        position: absolute;
+    }
+    .home-header span{
+        margin-left: 3rem;
+    }
+    
+    .section-2 img{
+        width:100%;
+        object-fit: cover;
+    
+    }
+    .illustration{
+        width:50% !important;
+        margin-right: 3rem;
+
+    }
+}
+@media only screen and (min-width:1285px){
+   .illustration{
+    display:block;
+   }   
+}
+

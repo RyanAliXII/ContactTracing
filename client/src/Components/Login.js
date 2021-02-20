@@ -3,9 +3,10 @@ import "../Assets/form.css";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from '../Contexts/AuthContext'
+import cors from '../cors'
 
 function Login({}) {
-  
+ 
   const [formData, setFormData] = useState({});
   const [session,refetchSession] = useContext(AuthContext)
   const invalidLoginRef = useRef();
@@ -18,10 +19,10 @@ function Login({}) {
   }
   async function sendFormData() {
     try {
-      const response = await axios.post("http://localhost:5000/signin", formData, {
+      const response = await axios.post(`${cors.domain}/signin`, formData, {
         headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Content-Type": "application/json"
+         // "Access-Control-Allow-Origin": "http://localhost:3000",
         },
         withCredentials: true,
       });
@@ -78,7 +79,7 @@ function Login({}) {
               <button
                 type="button"
                 onClick={sendFormData}
-                className="btn signin-btn ok default-clr"
+                className="btn signin-btn blue-bg default-clr"
               >
                 Sign In
             </button>

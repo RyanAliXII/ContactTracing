@@ -5,6 +5,7 @@ import {UserContext} from '../../Contexts/UserContext'
 import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import {AuthContext} from '../../Contexts/AuthContext'
 import {IoArrowBackCircleSharp} from 'react-icons/io5'
+import cors from '../../cors'
 function TravelLogs({setLoadingClass}) {
 
     const [user,setUser] = useContext(UserContext)
@@ -18,7 +19,7 @@ function TravelLogs({setLoadingClass}) {
         async function fetchTravelLogs(){
             setLoadingClass('loading-wrapper')
             try{
-            const {data} = await axios.post('http://localhost:5000/client/fetchlogs',JSON.parse(localStorage.getItem('userId')));
+            const {data} = await axios.post(`${cors.domain}/client/fetchlogs`,JSON.parse(localStorage.getItem('userId')));
             setLoadingClass('hide loading-wrapper')
             if(isMount){
             setTravelLogs(data);
@@ -47,7 +48,7 @@ function TravelLogs({setLoadingClass}) {
             <div className="travel-logs">
                 <div className="title-wrapper">
                     <span className="title-text">Travel Logs</span>
-                    <span className="back-btn" onClick={()=>{setLogsNavState(false)}}><IoArrowBackCircleSharp></IoArrowBackCircleSharp></span>
+                    <span className="back-btn blue-clr" onClick={()=>{setLogsNavState(false)}}><IoArrowBackCircleSharp></IoArrowBackCircleSharp></span>
                 </div>
                 <div className="travel-logs-wrapper">
                     <ul className="travel-log-lists">
@@ -84,7 +85,7 @@ function TravelLogList({ log,user,setLastReported}) {
             location:log.location,
             time:`${log.day}, ${log.time}, ${log.month}`
         }
-        const {data} = await axios.post('http://localhost:5000/client/report',report)
+        const {data} = await axios.post(`${cors.domain}/client/report`,report)
         console.log(data);
         
         setLastReported(report);

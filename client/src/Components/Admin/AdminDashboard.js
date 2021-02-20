@@ -5,7 +5,7 @@ import {AuthContext} from '../../Contexts/AuthContext'
 import {ReportsNavigationContext} from '../../Contexts/ReportNavigationContext'
 import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import axios from 'axios'
-
+import cors from '../../cors'
 
 function AdminDashboard() {
 
@@ -58,7 +58,7 @@ function AdminDashboard() {
         console.log(scannerFormData)
     }
     async function createRoom(){
-        const {data}  = await  axios.post('http://localhost:5000/room/createroom',{room:roomFormData})
+        const {data}  = await  axios.post(`${cors.domain}/room/createroom`,{room:roomFormData})
         setLastAddedRoom(roomFormData);
         closeCreateRoomForm()
 
@@ -66,7 +66,7 @@ function AdminDashboard() {
     useEffect(() => {
         let isMount = true;
         async function fetchRooms(){
-            const {data} = await axios.get('http://localhost:5000/room/fetchrooms')
+            const {data} = await axios.get(`${cors.domain}/room/fetchrooms`)
             if(isMount){
             setRooms(data);
             }
@@ -79,7 +79,8 @@ function AdminDashboard() {
 
     async function createScannerAccount(event){
         event.preventDefault();
-        const {data} = await axios.post('http://localhost:5000/room/signup',scannerFormData);
+        const {data} = await axios.post(`${cors.domain}/room/signup`,scannerFormData);
+        closeScannerForm();
           
     }
     useEffect(() => {
@@ -135,7 +136,7 @@ function AdminDashboard() {
                     <div className="btn-wrapper org-btn-wrapper">
 
                         <button type="button"
-                            className="btn bl-bg default-clr"
+                            className="btn blue-bg default-clr"
                             onClick={createRoom}>Create</button>
 
                         <button type="button"
@@ -181,7 +182,7 @@ function AdminDashboard() {
                         </select>
                     </div>
                     <div className="btn-wrapper org-btn-wrapper">
-                        <button type="submit" className="btn bl-bg default-clr">Create</button>
+                        <button type="submit" className="btn blue-bg default-clr">Create</button>
                         <button type="button"
                             className="btn bg1"
                             onClick={closeScannerForm}>Cancel</button>

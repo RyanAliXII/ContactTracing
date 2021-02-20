@@ -2,7 +2,7 @@ import React, { useState,useContext,useRef} from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from '../../Contexts/AuthContext'
-
+import cors from '../../cors'
 
 function ScannerLogin() {
   const [session,refetchSession] = useContext(AuthContext)  
@@ -19,7 +19,7 @@ function ScannerLogin() {
   async function sendFormData() {
     try {
        
-      const response = await axios.post("http://localhost:5000/room/signin", formData, {
+      const response = await axios.post(`${cors.domain}/room/signin`, formData, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "http://localhost:3000",
@@ -78,7 +78,7 @@ function ScannerLogin() {
               <button
                 type="button"
                 onClick={sendFormData}
-                className="btn ok default-clr"
+                className="btn blue-bg default-clr"
               >
                 Sign In
             </button>

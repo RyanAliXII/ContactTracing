@@ -161,6 +161,9 @@ input[type=number] {
 .add-height{
     height: 65vh;
 }
+.form-height{
+    height:120vh !important;
+}
 @media only screen and (min-width:1200px){
     .sign-in,.sign-up{
         width:100%;
@@ -176,5 +179,8 @@ input[type=number] {
     }
     .steps{
         margin:5vh auto;
+    }
+    .form-title span{
+        font-size: calc(0.9rem + 0.7vw);
     }
 }

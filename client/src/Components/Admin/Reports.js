@@ -3,6 +3,7 @@ import axios from 'axios';
 import { IoArrowBackCircleSharp } from 'react-icons/io5'
 import { Redirect } from 'react-router-dom'
 import { ReportsNavigationContext } from '../../Contexts/ReportNavigationContext'
+import cors from '../../cors'
 function Reports({setLoadingClass}) {
 
     const [reports, setReports] = useState([]);
@@ -12,7 +13,7 @@ function Reports({setLoadingClass}) {
 
         async function fetchReports() {
             setLoadingClass('loading-wrapper')
-            const { data } = await axios.post('http://localhost:5000/admin/reports', {})
+            const { data } = await axios.post(`${cors.domain}/admin/reports`, {})
             setLoadingClass('hide')
             if (isMount) {
                 setReports(data)
@@ -27,7 +28,7 @@ function Reports({setLoadingClass}) {
 
 
     if (!reportsNavState) {
-        return <Redirect to='/admin' />
+        return <Redirect to='/admin/dashboard'/>
     }
     return (
         JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Admin" ? (

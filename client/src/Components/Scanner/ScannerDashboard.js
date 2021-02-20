@@ -3,7 +3,7 @@ import QrReader from 'react-qr-scanner';
 import { Redirect } from 'react-router-dom'
 import  {AuthContext} from '../../Contexts/AuthContext'
 import axios from 'axios';
-
+import cors from '../../cors'
 
 
 
@@ -25,7 +25,7 @@ function ScannerDashboard({  }) {
     }
     const scannerMessageRef = useRef();
     async function sendData(qrCode) {
-        const {data} = await axios.post('http://localhost:5000/room/createlog', { qrCode: qrCode,location:user.room})
+        const {data} = await axios.post(`${cors.domain}/room/createlog`, { qrCode: qrCode,location:user.room})
         if(data === "OK"){
             scannerMessageRef.current.innerText= "QR CODE SUCCESSFULLY SCANNED"
             setTimeout(()=>{
@@ -43,7 +43,7 @@ function ScannerDashboard({  }) {
         let unmount = false;
         async function fetchUserData() {
             try{
-            const { data } = await axios.post('http://localhost:5000/user', {}, { withCredentials: true })
+            const { data } = await axios.post(`${cors.domain}/user`, {}, { withCredentials: true })
             if (!unmount) setUser(data)
             }
             catch (error) {

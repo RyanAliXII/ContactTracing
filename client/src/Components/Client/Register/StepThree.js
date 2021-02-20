@@ -1,5 +1,6 @@
 import React,{useState,useRef} from 'react';
 import axios from 'axios'
+import cors from '../../../cors'
 function StepThree({formData,showValid,incrementSteps}) {
 
     const [mobilecode,setCode] = useState();
@@ -15,9 +16,9 @@ function StepThree({formData,showValid,incrementSteps}) {
     
     function verify(event){
         event.preventDefault()
-        axios.post('http://localhost:5000/verify',{code:mobilecode,mobileNumber:formData.mobileNumber}).then(resp=>{
+        axios.post(`${cors.domain}/verify`,{code:mobilecode,mobileNumber:formData.mobileNumber}).then(resp=>{
             if(resp.data === "VERIFIED"){
-                axios.post('http://localhost:5000/signup',formData).then((resp)=>{
+                axios.post(`${cors.domain}/signup`,formData).then((resp)=>{
                    incrementSteps();
                 })
             }
@@ -55,7 +56,7 @@ function StepThree({formData,showValid,incrementSteps}) {
         <ol className="steps">
             <li className="stepOne">1. Account</li>
             <li className="stepTwo">2. Information</li>
-            <li className="stepThree active">3. Confirmation</li>
+            <li className="stepThree blue-bg default-clr active">3. Confirmation</li>
         </ol>     
        <div className="form-wrapper">
        <div className="form-title">
@@ -67,7 +68,7 @@ function StepThree({formData,showValid,incrementSteps}) {
        <span className="error-message" ref={codeErrorMessageRef}>You entered a wrong code</span>
    </div>
    <div className="btn-wrapper">
-   <button type="submit" className="btn bl-bg default-clr" onClick={verify}>Confirm</button>
+   <button type="submit" className="btn blue-bg default-clr" onClick={verify}>Confirm</button>
    </div>
    </form>
    </div>

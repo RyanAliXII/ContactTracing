@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { AuthContext } from './AuthContext'
 import axios from 'axios'
-
+import cors from '../cors'
 export const UserContext = createContext();
 
 export const UserProvider = (props) => {
@@ -17,7 +17,7 @@ export const UserProvider = (props) => {
     useEffect(() => {
         let isMount = true;
         async function fetchUserData() {
-            const { data } = await axios.post('http://localhost:5000/user', {}, { withCredentials: true });
+            const { data } = await axios.post(`${cors.domain}/user`, {}, { withCredentials: true });
             localStorage.setItem('userId',JSON.stringify({id:data.id}))
             if(isMount){
           
@@ -27,7 +27,7 @@ export const UserProvider = (props) => {
         
         fetchUserData();
         setLoading(false);
-        console.log("OK")
+       
         return ()=>{
             isMount = false;
         }
