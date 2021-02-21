@@ -1,7 +1,7 @@
 const dbUtils = require('../utils/dbUtils')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
-const moment = require('moment');
+const moment = require('moment-timezone');
 module.exports = {
 
     signIn: async (req, res) => {
@@ -97,7 +97,7 @@ module.exports = {
         try{
             const date = new Date(req.params.date);
             const  room = req.params.room;
-            const convertedDate = moment(date).format('l').valueOf();
+            const convertedDate = moment(date).tz('Asia/Shanghai').format('l').valueOf();
 
             const database = await dbUtils.connectToDB();
             const dbResults = await database.collection('users').find({role:"Client"}).toArray();

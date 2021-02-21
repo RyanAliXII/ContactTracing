@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { v4: uuidV4 } = require("uuid");
 const { ObjectId } = require('mongodb');
-const moment = require('moment')
+const moment = require('moment-timezone')
 module.exports = {
 
     signIn: async (req, res) => {
@@ -88,10 +88,10 @@ module.exports = {
     },
     createTravelLog: async (req, res) => {
         try {
-            const day = moment().format('dddd').valueOf()
-            const month = moment().format('MMM Do YY').valueOf();
-            const time = moment().format('h:mm:a').valueOf()
-            const fullDate = moment().format('l').valueOf();   
+            const day = moment().tz('Asia/Shanghai').format('dddd').valueOf()
+            const month = moment().tz('Asia/Shanghai').format('MMM Do YY').valueOf();
+            const time = moment().tz('Asia/Shanghai').format('h:mm:a').valueOf()
+            const fullDate = moment().tz('Asia/Shanghai').format('l').valueOf();   
 
             const log = {
                 id: uuidV4(),
