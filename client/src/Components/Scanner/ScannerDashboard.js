@@ -1,5 +1,6 @@
 import React, { useState, useEffect,useRef,useContext} from 'react';
-import QrReader from 'react-qr-scanner';
+import QrReader from 'react-qr-reader';
+
 import { Redirect } from 'react-router-dom'
 import  {AuthContext} from '../../Contexts/AuthContext'
 import axios from 'axios';
@@ -10,7 +11,7 @@ import cors from '../../cors'
 function ScannerDashboard({  }) {
     const [findScan, setScan] = useState(false)
     const [session,fetchSession] = useContext(AuthContext)
-    const [facingMode,setFacingMode] = useState('front')
+    const [facingMode,setFacingMode] = useState('environment')
 
     const [user, setUser] = useState({
         room: "NONE"
@@ -20,9 +21,8 @@ function ScannerDashboard({  }) {
     }
     function handleHandleScan(result) {
         if (result !== null && findScan === false) {
-            let qrCode = result.text;
             setScan(true);
-            sendData(qrCode);
+            sendData(result);
         }
     }
     const scannerMessageRef = useRef();
@@ -83,9 +83,9 @@ function ScannerDashboard({  }) {
                 <div className="select-wrapper">
                 <div className="input-wrapper">
                     <select className="bg1" onChange={handleFacingMode}>
-                        <option>Select Facing Mode</option>
-                        <option value="front">Front</option>
-                        <option value="rear">Rear</option>
+                        <option onChange={handleFacingMode}>Select Facing Mode</option>
+                        <option value="environment">Front</option>
+                        <option value="user">Rear</option>
                     </select>
                 </div>
                 </div>

@@ -21,7 +21,7 @@ import {ReportsNavigationProvider} from './Contexts/ReportNavigationContext'
 import {ProfileNavStateProvider} from './Contexts/ProfileNavState'
 import Logs from './Components/Admin/Logs'
 import Loading from './Components/Loading'
-import NotFound from './Components/NotFound'
+
 import {
   BrowserRouter as Router,
   Route,

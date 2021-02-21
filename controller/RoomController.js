@@ -102,6 +102,7 @@ module.exports = {
                 fullDate: fullDate,
                 isReported: false
             }
+           
             const database = await dbUtils.connectToDB();
             database.collection('users').updateOne({ qrCode: req.body.qrCode }, { $push: { travel_logs: log } })
             res.send("OK")
