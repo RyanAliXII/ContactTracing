@@ -72,7 +72,7 @@
 }
 .input-wrapper input:focus,.input-wrapper select:focus,.input-wrapper textarea:focus{
     outline:2px solid #6BD382;
-    outline-offset: -2px;
+    outline-offset: -0.5px;
 }
 .input-wrapper .error-message{
     color:#db5248;
