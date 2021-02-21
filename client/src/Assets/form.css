@@ -169,7 +169,8 @@ input[type=number] {
         width:100%;
         margin:auto;
         max-width:700px;
-        border: 1px solid #dbdbd9;
+        filter: drop-shadow(1px 1px 5px #ebebeb) ;
+        background:white;
         height:100vh;
     }
     .form-wrapper{

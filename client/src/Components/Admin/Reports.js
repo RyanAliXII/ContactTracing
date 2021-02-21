@@ -35,7 +35,7 @@ function Reports({setLoadingClass}) {
             <div className="reports">
                 <div className="title-wrapper">
                     <span className="title-text">Reports</span>
-                    <span className="back-btn" onClick={() => {
+                    <span className="back-btn blue-clr" onClick={() => {
                         setReportsNavState(false)
                     }}><IoArrowBackCircleSharp></IoArrowBackCircleSharp></span>
                 </div>

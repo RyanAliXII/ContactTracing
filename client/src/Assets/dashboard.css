@@ -159,7 +159,6 @@ overflow-y: scroll;
 .not-me{
     width:30%;
     height: 3vh;
-    text-align:center;
     border-radius:5px;
     cursor: pointer;
     max-width:124px;
@@ -354,12 +353,14 @@ overflow-y: scroll;
         max-width: 700px;
         height: 140vh;
         margin:auto;
-        border: 1px solid #dbdbd9;
+        filter: drop-shadow(0px 0px 3px #ebebeb);
+        background-color:#FFFFFF ;
     }
     .travel-logs{
         margin: auto;
         width:85%;
-        border: 1px solid #dbdbd9;
+        filter: drop-shadow(1px 1px 5px #ebebeb);
+        background:#FFFFFF;
         max-width:700px;
     }
     .profile{
@@ -369,7 +370,7 @@ overflow-y: scroll;
         position:fixed;
         width: 50% ;
         top: 0;
-        border: 1px solid #dbdbd9;
+        filter: drop-shadow(0px 0px 3px #ebebeb);
         left:50%;
         transform:translate(-50%);
         background:#FFFFFF;
@@ -377,7 +378,11 @@ overflow-y: scroll;
     .reports{
         width:80%;
         margin: auto;
-        border: 1px solid #dbdbd9;
+        background:#FFFFFF;
+        filter: drop-shadow(0px 0px 3px #ebebeb);
         height:100vh;
+    }
+    .light{
+        font-weight:200;
     }
 }

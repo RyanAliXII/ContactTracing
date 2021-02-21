@@ -94,7 +94,7 @@ function TravelLogList({ log,user,setLastReported}) {
         <li className="travel-log-list bg1">
            <span className="location">{log.location}</span>
            <span className="time">{`${log.day}, ${log.time}, ${log.month}`}</span>
-           <span className="not-me warn-bg default-clr" onClick={()=>{setReportModalClass('report-modal bg1')}}>Report</span>
+           <span className="not-me warn light" onClick={()=>{setReportModalClass('report-modal bg1')}}>Report</span>
            <div className={reportModalClass}>
                <div className="report-modal-header warn-bg">
                    <span className="default-clr">Confirmation</span>

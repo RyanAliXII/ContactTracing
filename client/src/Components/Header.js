@@ -17,7 +17,7 @@ function Header(props) {
     }
 
     return (
-        <header className="nav-header blue-bg">   
+        <header className="nav-header">   
                <div className="logout">
                     <span className="default-clr" onClick={logout}><BiLogOut></BiLogOut></span>
                    </div> 
