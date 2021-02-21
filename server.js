@@ -13,13 +13,14 @@ const cors = require('cors');
 const session = require('express-session')
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken')
-
+const path = require('path')
 
 
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors(corsConfig));
+app.use(express.static(path.join(__dirname,'client/build')))
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -41,7 +42,6 @@ app.get('/auth', (req, res) => {
 })
 app.post('/user',(req,res)=>{
     const user = req.session.user;
-    console.log(user);
     if(user === undefined){
         res.json({
             name:"NULL",
@@ -68,11 +68,18 @@ app.post('/fetchtoken', (req, res) => {
 })
 
 
+
 app.use('/philippines', PH_PROVINCES_CITIES)
 app.use('/', loginSystem)
 app.use('/room',roomRoutes)
 app.use('/admin',adminRoutes)
 app.use('/client',clientRoutes)
+
+app.get('*',(req,res)=>{
+
+    res.sendFile(path.join(__dirname+'/client/build/index.html'))
+})
+
 app.listen(process.env.PORT, () => {
     console.log("Server up and running: " + PORT);
 });

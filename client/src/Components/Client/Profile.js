@@ -282,9 +282,9 @@ function MobilePhoneModal({ user, fetchSession, setMobileInfoModal, mobileInfoMo
     async function submitNewMobileNumber() {
 
         if (isValidMobileNumber) {
-            console.log(newMobileNumber);
+           
             const { data } = await axios.post(`${cors.domain}/createVerification`, { mobileNumber: newMobileNumber });
-            console.log(data);
+           
             setStep(prevState => prevState + 1)
 
         }

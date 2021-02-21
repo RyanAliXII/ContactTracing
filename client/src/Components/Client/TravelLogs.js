@@ -86,7 +86,7 @@ function TravelLogList({ log,user,setLastReported}) {
             time:`${log.day}, ${log.time}, ${log.month}`
         }
         const {data} = await axios.post(`${cors.domain}/client/report`,report)
-        console.log(data);
+      
         
         setLastReported(report);
     }

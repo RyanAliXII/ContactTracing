@@ -22,7 +22,7 @@ module.exports = {
             }
             if (isPasswordTheSame) {
                 req.session.user = user;
-                console.log(req.session.user)
+         
                 const accessToken = jwt.sign(req.session.user, process.env.JWT_SECRET)
                 const refreshToken = jwt.sign(req.session.user, process.env.JWT_REFRESH_SECRET)
                 res.cookie("refreshToken", refreshToken, { maxAge: 3600 * 1000, httpOnly: true }).json({ message: "OK", token: accessToken, role: user.role });
@@ -117,7 +117,6 @@ module.exports = {
             
             })
             const filteredData = data.filter(d=>d.fullDate === convertedDate && d.location === room).map(d=> d);
-            console.log(filteredData)
             res.send(filteredData);
             }catch (error) {
                 console.log(error)

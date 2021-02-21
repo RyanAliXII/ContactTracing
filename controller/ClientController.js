@@ -124,7 +124,7 @@ module.exports = {
         const userId = req.body.id;
         const mobileNumber = req.body.mobileNumber;
         const database = await dbUtils.connectToDB();
-        console.log(req.body)
+        
         const {value} =  await database.collection('users').findOneAndUpdate({_id:ObjectId(userId)},{$set:{mobileNumber: mobileNumber}},{returnOriginal:false})
         user = {
             id: value._id,
@@ -147,7 +147,7 @@ module.exports = {
         }
     },
     validatePasswordIsSame:async(req,res)=>{
-        console.log(req.body)
+       
         const userId = req.body.id;
         const password = req.body.password;
         const bool = await validate.isPasswordTheSame(userId,password)

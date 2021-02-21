@@ -55,7 +55,7 @@ function AdminDashboard() {
         setScannerFormData(prevState => ({
             ...prevState, [name]: value
         }));
-        console.log(scannerFormData)
+       
     }
     async function createRoom(){
         const {data}  = await  axios.post(`${cors.domain}/room/createroom`,{room:roomFormData})

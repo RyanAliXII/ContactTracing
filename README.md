@@ -1,6 +1,6 @@
 # Contact Tracing Web Application for School Campus
 
-Created using **MongoDB, Express, React and Node JS**
+Created using **MongoDB, Express, React and Node JS** with **Twilio Verify API** for user verification.
 
 ## Description
 
@@ -26,7 +26,7 @@ The users are consisted of **Client, Admin and Room Account**
 ### Administrator
 
 - **View Reports**
-- **View Client Travel Logs with Filters**
+- **View Client's Travel Logs with Filters**
 - **Create Room and Room Account**
 
 ### Room Account 
@@ -41,3 +41,4 @@ The users are consisted of **Client, Admin and Room Account**
 - [Bcrypt](https://www.npmjs.com/package/bcrypt "Bcrypt")
 - [Express](https://expressjs.com/ "Express")
 - [qrcode.react](https://www.npmjs.com/package/qrcode.react "qrcode.react")
+- [Twilio Verify](https://www.twilio.com/ "Twilio Verify")

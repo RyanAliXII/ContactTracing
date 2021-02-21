@@ -69,7 +69,7 @@ function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInva
             && isNotEmpty(formData.fullAddress)
         ) {
             const {data} = await axios.post(`${cors.domain}/createVerification`, { mobileNumber: formData.mobileNumber });
-            console.log(data)
+            
             incrementSteps()
         }
     }

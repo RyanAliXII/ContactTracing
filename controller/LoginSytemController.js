@@ -79,7 +79,7 @@ module.exports = {
     },
 
     verify: async (req, res) => {
-        console.log(req.body)
+      
         try {
             let mobileNumber = req.body.mobileNumber;
             mobileNumber = `+63${mobileNumber.substring(1, 11)}`;
@@ -100,7 +100,7 @@ module.exports = {
     },
 
     createVerification: async (req, res) => {
-        console.log(req.body)
+   
         try {
             let mobileNumber = req.body.mobileNumber;
             mobileNumber = `+63${mobileNumber.substring(1, 11)}`;

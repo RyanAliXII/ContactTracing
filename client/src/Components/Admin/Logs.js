@@ -78,7 +78,7 @@ function Logs({setLoadingClass}) {
              <DatePicker   
              selected={dateFilter}  
              onChange={date =>{
-                    console.log(date);
+                   
                  setDateFilter(date);
              }
             } 
