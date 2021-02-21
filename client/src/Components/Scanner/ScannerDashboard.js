@@ -71,7 +71,7 @@ function ScannerDashboard({  }) {
                         onScan={handleHandleScan}
                         onError={handleError}
                         className="scanner"
-                        facingMode={'front'}
+                        facingMode="environment"
                     ></QrReader>
                     <div className=""></div>
                 </div>
