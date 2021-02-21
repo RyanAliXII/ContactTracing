@@ -30,6 +30,11 @@ import {
 
 
 function App() {
+  if(localStorage.getItem('auth') === null){
+    console.log("FIRST RUN");
+    localStorage.setItem('auth',JSON.stringify({bool:false, role:"none"}))
+    localStorage.setItem('userId',JSON.stringify({id:''}))
+  }
   const [loadingClass,setLoadingClass] = useState('hide')
   return (
     <>
