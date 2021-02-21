@@ -102,3 +102,7 @@ cursor: pointer;
     font-weight:700;
     
 }
+.select-wrapper {
+    width:60%;
+    margin:auto
+}

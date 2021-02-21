@@ -10,11 +10,13 @@ import cors from '../../cors'
 function ScannerDashboard({  }) {
     const [findScan, setScan] = useState(false)
     const [session,fetchSession] = useContext(AuthContext)
+    const [facingMode,setFacingMode] = useState('front')
+
     const [user, setUser] = useState({
         room: "NONE"
     });
-    function handleError() {
-        console.log("ERROR")
+    function handleError(error) {
+        console.log(error)
     }
     function handleHandleScan(result) {
         if (result !== null && findScan === false) {
@@ -37,7 +39,9 @@ function ScannerDashboard({  }) {
             },3000)
         }
     }
-    
+    function handleFacingMode(event){
+      setFacingMode(event.target.value)
+    }
     useEffect(() => {
       
         let unmount = false;
@@ -69,11 +73,21 @@ function ScannerDashboard({  }) {
                     <span ref={scannerMessageRef}>Ready to Scan</span>
                     <QrReader
                         onScan={handleHandleScan}
+                        facingmode={facingMode}
                         onError={handleError}
                         className="scanner"
-                        facingMode="environment"
+                        
                     ></QrReader>
                     <div className=""></div>
+                </div>
+                <div className="select-wrapper">
+                <div className="input-wrapper">
+                    <select className="bg1" onChange={handleFacingMode}>
+                        <option>Select Facing Mode</option>
+                        <option value="front">Front</option>
+                        <option value="rear">Rear</option>
+                    </select>
+                </div>
                 </div>
             </div>
             ): (<Redirect to="/"></Redirect>)
