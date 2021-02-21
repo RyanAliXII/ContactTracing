@@ -9,8 +9,8 @@ export const UserProvider = (props) => {
     const [isLoading,setLoading] = useState(true);
     const [session, fetchSession] = useContext(AuthContext);
     const [user, setUser] = useState({
-        name: "NULL",
-        qrCode: "NULL",
+        name: " ",
+        qrCode: " ",
         fullAddress:" "
     });
    
