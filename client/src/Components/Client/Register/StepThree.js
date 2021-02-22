@@ -1,7 +1,7 @@
 import React,{useState,useRef} from 'react';
 import axios from 'axios'
 import cors from '../../../cors'
-function StepThree({formData,showValid,incrementSteps}) {
+function StepThree({formData,showValid,incrementSteps,setLoadingClass}) {
 
     const [mobilecode,setCode] = useState();
     const codeErrorMessageRef = useRef()
@@ -16,13 +16,16 @@ function StepThree({formData,showValid,incrementSteps}) {
     
     function verify(event){
         event.preventDefault()
+        setLoadingClass('loading-wrapper')
         axios.post(`${cors.domain}/verify`,{code:mobilecode,mobileNumber:formData.mobileNumber}).then(resp=>{
             if(resp.data === "VERIFIED"){
                 axios.post(`${cors.domain}/signup`,formData).then((resp)=>{
+                    setLoadingClass('hide')
                    incrementSteps();
                 })
             }
             else{
+                setLoadingClass('hide')
                 showInvalid_LOCAL(codeInput.current,codeErrorMessageRef);
             }
         });

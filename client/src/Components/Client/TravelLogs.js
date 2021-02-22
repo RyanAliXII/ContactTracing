@@ -54,7 +54,7 @@ function TravelLogs({setLoadingClass}) {
                     <ul className="travel-log-lists">
                     { 
                         travelLogs.map((log,index)=>{
-                            return <TravelLogList log={log} setLastReported={setLastReported} user={user} key={index}></TravelLogList>
+                            return <TravelLogList log={log} setLastReported={setLastReported} user={user} key={index} setLoadingClass={setLoadingClass}></TravelLogList>
                         })
                          
                     }      
@@ -67,7 +67,7 @@ function TravelLogs({setLoadingClass}) {
         );
     
 }
-function TravelLogList({ log,user,setLastReported}) {
+function TravelLogList({ log,user,setLastReported,setLoadingClass}) {
 
     const [logState,setLogState] = useState({});
     const [reportModalClass, setReportModalClass] = useState('report-modal bg1 hide');
@@ -78,6 +78,7 @@ function TravelLogList({ log,user,setLastReported}) {
         }
     },[])
     async function sendReport(){
+        try{
         const report = {
             id:user.id,
             name:user.name,
@@ -85,9 +86,16 @@ function TravelLogList({ log,user,setLastReported}) {
             location:log.location,
             time:`${log.day}, ${log.time}, ${log.month}`
         }
+        setLoadingClass('loading-wrapper')
         const {data} = await axios.post(`${cors.domain}/client/report`,report)
-        
-        setLastReported(report);
+        if(data === "OK"){
+            setLoadingClass('hide')
+        }
+        setLastReported(report)
+    }catch (error) {
+        setLoadingClass('hide')
+        console.log(error)
+    }
     }
     return (
         !log.isReported ? (

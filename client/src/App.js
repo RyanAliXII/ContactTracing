@@ -50,10 +50,10 @@ function App() {
         
         <Switch>
         <Route path="/signin">
-          <Login ></Login>
+          <Login setLoadingClass = {setLoadingClass}></Login>
         </Route>
      <Route path="/signup">
-          <Register></Register>
+          <Register setLoadingClass = {setLoadingClass}></Register>
         </Route>
       <Route path="/" exact component={Home}></Route>
 
@@ -67,7 +67,7 @@ function App() {
           </TravelLogs>
         </Route>
       <Route path="/dashboard/profile">
-        <Profile></Profile>
+        <Profile setLoadingClass = {setLoadingClass}></Profile>
       </Route>
         <Route path="/dashboard" >
           <Header></Header>
@@ -81,7 +81,7 @@ function App() {
     <Switch>
         <Route path="/org/scanner">
           <Header></Header>
-          <Scanner >
+          <Scanner setLoadingClass = {setLoadingClass}>
           </Scanner>
         </Route>
         <Route path="/org" >

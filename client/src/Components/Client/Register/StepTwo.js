@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, } from 'react';
 import axios from 'axios';
 import cors from  '../../../cors'
 
-function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInvalid }) {
+function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInvalid,setLoadingClass}) {
 
     const invalidMobileNumberErrorRef = useRef(); //span error message
     const mobileNumberTakenRef = useRef();// span error message
@@ -68,9 +68,13 @@ function StepTwo({ handleFormData, formData, incrementSteps, showValid, showInva
             && isNotEmpty(formData.city)
             && isNotEmpty(formData.fullAddress)
         ) {
+            setLoadingClass('loading-wrapper')
             const {data} = await axios.post(`${cors.domain}/createVerification`, { mobileNumber: formData.mobileNumber });
+            if(data === "OK"){
+                setLoadingClass('hide')
+                incrementSteps()
+            }
             
-            incrementSteps()
         }
     }
     function isNotEmpty(someVar) {

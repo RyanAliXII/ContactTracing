@@ -8,7 +8,7 @@ import cors from '../../cors'
 
 
 
-function ScannerDashboard({  }) {
+function ScannerDashboard({ setLoadingClass }) {
     const [findScan, setScan] = useState(false)
     const [session,fetchSession] = useContext(AuthContext)
     const [facingMode,setFacingMode] = useState('environment')
@@ -27,9 +27,11 @@ function ScannerDashboard({  }) {
     }
     const scannerMessageRef = useRef();
     async function sendData(qrCode) {
+        scannerMessageRef.current.innerText= "QR CODE SUCCESSFULLY SCANNED"
+        setLoadingClass('loading-wrapper')
         const {data} = await axios.post(`${cors.domain}/room/createlog`, { qrCode: qrCode,location:user.room})
         if(data === "OK"){
-            scannerMessageRef.current.innerText= "QR CODE SUCCESSFULLY SCANNED"
+            setLoadingClass('hide')
             setTimeout(()=>{
                 if(window.location.pathname === '/org/Scanner'){
                     setScan(false);

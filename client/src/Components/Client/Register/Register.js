@@ -4,7 +4,7 @@ import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import StepThree from './StepThree'
 import {Redirect} from 'react-router-dom'
-function Register(props) {
+function Register({setLoadingClass}) {
 
     const [steps,setSteps] = useState(1);
     const [userFormData,setFormData] = useState();
@@ -57,9 +57,9 @@ function Register(props) {
         case 1: 
         return <StepOne handleFormData={handleFormData} showValid={showValid} showInvalid={showInvalid} incrementSteps={incrementSteps}></StepOne>
         case 2:
-        return <StepTwo handleFormData={handleFormData} showValid={showValid} showInvalid={showInvalid}  incrementSteps={incrementSteps} formData={userFormData} > </StepTwo>
+        return <StepTwo setLoadingClass={setLoadingClass} handleFormData={handleFormData} showValid={showValid} showInvalid={showInvalid}  incrementSteps={incrementSteps} formData={userFormData} > </StepTwo>
         case 3:
-        return <StepThree formData={userFormData} showValid={showValid} incrementSteps={incrementSteps} ></StepThree>
+        return <StepThree setLoadingClass={setLoadingClass} formData={userFormData} showValid={showValid} incrementSteps={incrementSteps} ></StepThree>
         default:
         return <Redirect to="/signin"></Redirect>
     }

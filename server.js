@@ -44,8 +44,8 @@ app.post('/user',(req,res)=>{
     const user = req.session.user;
     if(user === undefined){
         res.json({
-            name:"NULL",
-            qrCode:"NULL"
+            name:" ",
+            qrCode:" "
         })
     }
     res.json(user)
