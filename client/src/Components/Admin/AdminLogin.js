@@ -4,7 +4,7 @@ import {AuthContext} from '../../Contexts/AuthContext'
 import axios from "axios";
 import cors from "../../cors"
 
-function AdminLogin() {
+function AdminLogin({setLoadingClass}) {
   
   const [session,reFetchSession] = useContext(AuthContext)
   const [formData, setFormData] = useState({});
@@ -18,7 +18,7 @@ function AdminLogin() {
   }
   async function sendFormData() {
     try {
-       
+      setLoadingClass('loading-wrapper');
       const response = await axios.post(`${cors.domain}/admin/signin`, formData, {
         headers: {
           "Content-Type": "application/json"
@@ -29,11 +29,14 @@ function AdminLogin() {
       if (response.data.message === "OK") {
         localStorage.setItem('auth',JSON.stringify({bool:true,role:"Admin"}))
         reFetchSession(prevState => prevState + 1);
+        setLoadingClass('hide')
       }
       else {
         invalidLoginRef.current.style.display = "inline"
+        setLoadingClass('hide')
       }
     } catch (error) {
+      setLoadingClass('hide')
       console.log(error)
     }
   }

@@ -4,7 +4,7 @@ import axios from "axios";
 import {AuthContext} from '../../Contexts/AuthContext'
 import cors from '../../cors'
 
-function ScannerLogin() {
+function ScannerLogin({setLoadingClass}) {
   const [session,refetchSession] = useContext(AuthContext)  
   const [formData, setFormData] = useState({});
 
@@ -18,7 +18,7 @@ function ScannerLogin() {
   }
   async function sendFormData() {
     try {
-       
+       setLoadingClass('loading-wrapper')
       const response = await axios.post(`${cors.domain}/room/signin`, formData, {
         headers: {
           "Content-Type": "application/json",
@@ -27,13 +27,16 @@ function ScannerLogin() {
         withCredentials: true,
       });
       if (response.data.message === "OK") {
+        setLoadingClass('hide')
         localStorage.setItem('auth',JSON.stringify({bool:true,role:"Scanner"}))
         refetchSession(prevState=> prevState + 1);
       }
       else {
+        setLoadingClass('hide')
         invalidLoginRef.current.style.display = "inline"
       }
     } catch (error) {
+      setLoadingClass('hide')
       console.log(error)
     }
   }

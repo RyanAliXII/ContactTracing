@@ -71,7 +71,7 @@ function Logs({setLoadingClass}) {
          <div className="travel-logs">
              <div className="title-wrapper">
                  <span className="title-text">Student Logs</span>
-                 <span className="back-btn"  onClick={()=>{setLogsNavState(false)}}><IoArrowBackCircleSharp></IoArrowBackCircleSharp></span>
+                 <span className="back-btn blue-clr"  onClick={()=>{setLogsNavState(false)}}><IoArrowBackCircleSharp></IoArrowBackCircleSharp></span>
              </div>
            <div className="filters">
                <label>Filters</label>

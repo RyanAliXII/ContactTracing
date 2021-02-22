@@ -7,7 +7,7 @@ import {LogsNavigationContext} from '../../Contexts/LogsNavigationContext'
 import axios from 'axios'
 import cors from '../../cors'
 
-function AdminDashboard() {
+function AdminDashboard({setLoadingClass}) {
 
 
     const [roomFormClass, setRoomFormClass] = useState('form-wrapper fixed-pos default-bg hide')
@@ -57,10 +57,18 @@ function AdminDashboard() {
         }));
        
     }
-    async function createRoom(){
+    async function createRoom(event){
+        event.preventDefault();
+        setLoadingClass('loading-wrapper')
         const {data}  = await  axios.post(`${cors.domain}/room/createroom`,{room:roomFormData})
-        setLastAddedRoom(roomFormData);
-        closeCreateRoomForm()
+        if(data === "OK"){
+            setLastAddedRoom(roomFormData);
+            closeCreateRoomForm()  
+            
+        }
+
+        setLoadingClass('hide')
+        
 
     }
     useEffect(() => {
@@ -124,7 +132,7 @@ function AdminDashboard() {
             <div className={roomFormClass}>
                 <div className="form-title org-form-title">
                     <span>Create Room</span></div>
-                <form className="form-form org-form">
+                <form className="form-form org-form" onSubmit={createRoom}>
                     <div className="input-wrapper org-input-wrapper">
                         <label className="" htmlFor="org">Room Name</label>
                         <input type="name"
@@ -135,9 +143,9 @@ function AdminDashboard() {
                     </div>
                     <div className="btn-wrapper org-btn-wrapper">
 
-                        <button type="button"
+                        <button type="submit"
                             className="btn blue-bg default-clr"
-                            onClick={createRoom}>Create</button>
+                            >Create</button>
 
                         <button type="button"
                             className="btn bg1"
@@ -172,7 +180,9 @@ function AdminDashboard() {
                         <label className="" htmlFor="org">Room</label>
                         <select className="bg1"
                             name="room"
-                            onChange={handleScannerFormData}>
+                            onChange={handleScannerFormData}
+                            required
+                            >
                             <option value="">Select Organization</option>
                             {
                                 rooms.map(room => {

@@ -85,7 +85,7 @@ function App() {
           </Scanner>
         </Route>
         <Route path="/org" >
-          <ScannerLogin >
+          <ScannerLogin setLoadingClass={setLoadingClass}>
           </ScannerLogin>
         </Route>
       </Switch>
@@ -100,7 +100,7 @@ function App() {
 
       <Route path="/admin/dashboard">
           <Header></Header>
-          <AdminDashboard>
+          <AdminDashboard setLoadingClass={setLoadingClass}>
           </AdminDashboard>
           </Route>
 
@@ -109,7 +109,7 @@ function App() {
         </Route>  
 
         <Route path="/admin">
-          <AdminLogin>
+          <AdminLogin setLoadingClass = {setLoadingClass}>
           </AdminLogin>
           </Route>
 
