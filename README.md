@@ -4,7 +4,7 @@ Created using **MongoDB, Express, React and Node JS** with **Twilio Verify API**
 
 ## Description
 
-This is my self-project made using MERN Stack. Originally, The scope of this project was national level but, I turned down the scope into school campus use. That is why there is some inconsistencies on the code, but I gave all my best to make it clean as much as possible. The reason for turning down the scope is because i am solo developer and i did not much have time because of school works.
+This is my self-project made using MERN Stack. Originally, The scope of this project was city level but, I turned down the scope into school campus use. That is why there is some inconsistencies on the code, but I gave all my best to make it clean as much as possible. The reason for turning down the scope is because i am solo developer and i did not much have time because of school works.
 
 ## How to Run
 
@@ -15,8 +15,8 @@ This is my self-project made using MERN Stack. Originally, The scope of this pro
 ## Features
 
 The users are consisted of **Client, Admin and Room Account**
- 
-### Client 
+
+### Client
 
 - **Register and Sign In**
 - **Generate New QR Code**
@@ -35,10 +35,14 @@ The users are consisted of **Client, Admin and Room Account**
 
 ## Resources
 
-- [react-qr-scanner](https://www.npmjs.com/package/react-qr-scanner "react-qr-scanner")
+- [react-qr-reader](https://www.npmjs.com/package/react-qr-reader "react-qr-reader")
 - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/lp/try2?utm_source=google&utm_campaign=gs_apac_philippines_search_core_brand_atlas_desktop&utm_term=mongodb%20atlas&utm_medium=cpc_paid_search&utm_ad=e&utm_ad_campaign_id=12212624359&gclid=CjwKCAiAg8OBBhA8EiwAlKw3ksHfalJhkUSNXID0eA3i3KtnBau2rg1KNOWLE31OBtLvopOjRuzmYRoCDnMQAvD_BwE "MongoDB Atlas")
 - [React Icons](https://react-icons.github.io/react-icons/ "React Icons")
 - [Bcrypt](https://www.npmjs.com/package/bcrypt "Bcrypt")
 - [Express](https://expressjs.com/ "Express")
 - [qrcode.react](https://www.npmjs.com/package/qrcode.react "qrcode.react")
 - [Twilio Verify](https://www.twilio.com/ "Twilio Verify")
+
+## Link
+
+[Campus Contact Tracing PWA](https://campus-contact-tracing.herokuapp.com/ "Campus Contact Tracing PWA")
