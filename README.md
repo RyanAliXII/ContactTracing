@@ -1,4 +1,4 @@
-# Contact Tracing Web Application for School Campus
+# Contact Tracing Progressive Web Application for School Campus
 
 Created using **MongoDB, Express, React and Node JS** with **Twilio Verify API** for user verification.
 
