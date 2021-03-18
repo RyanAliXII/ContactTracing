@@ -42,6 +42,7 @@ The users are consisted of **Client, Admin and Room Account**
 - [Express](https://expressjs.com/ "Express")
 - [qrcode.react](https://www.npmjs.com/package/qrcode.react "qrcode.react")
 - [Twilio Verify](https://www.twilio.com/ "Twilio Verify")
+- [Cloudinary](https://cloudinary.com/ "Cloudinary")
 
 ## Link
 

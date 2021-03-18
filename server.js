@@ -14,6 +14,7 @@ const session = require('express-session')
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken')
 const path = require('path')
+const MemoryStore = require('memorystore')(session)
 
 
 app.use(cookieParser())
@@ -26,6 +27,9 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     maxAge: 3600 * 1000,
+    store: new MemoryStore({
+        checkPeriod: 86400000 
+      }),
     saveUninitialized: true,
     cookie: { secure: false, httpOnly: true }
 }))

@@ -70,8 +70,7 @@ module.exports = {
     },
     isImage:(fileExtension)=>{
             const arrayOfAllowedFileExtensions = ['image/jpeg','image/png']
-            console.log(fileExtension)
-            
+
             for(let i = 0; i < arrayOfAllowedFileExtensions.length; i++){
                 if(fileExtension === arrayOfAllowedFileExtensions[i]){
                     return true;

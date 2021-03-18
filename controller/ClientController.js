@@ -206,7 +206,7 @@ module.exports = {
                 public_id:`${Date.now()}${imageFile.originalname}`
 
             })
-      
+            console.log("UPLOADING");
             const profilePicture = {
                 profilePicture:{
                 id:uploadResult.public_id,
@@ -221,7 +221,7 @@ module.exports = {
                const deleteResult  = await cloudinary.uploader.destroy(value.profilePicture.id);
                console.log(deleteResult);
            }
-         
+           console.log("DATABASE")
             user = {
             id: value._id,
             name: value.fullname,
