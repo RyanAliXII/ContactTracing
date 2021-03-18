@@ -1,6 +1,6 @@
 # Contact Tracing Progressive Web Application for School Campus
 
-Created using **MongoDB, Express, React and Node JS** with **Twilio Verify API** for user verification.
+Created using **MongoDB, Express, React and Node JS** with **Twilio Verify API** for user verification and **Cloudinary** for cloud store.
 
 ## Description
 
