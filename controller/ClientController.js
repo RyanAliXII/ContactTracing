@@ -1,9 +1,18 @@
+require('dotenv').config();
 const dbUtils = require('../utils/dbUtils')
 const { v4: uuidV4 } = require("uuid");
 const { ObjectId } = require('mongodb');
 const moment = require('moment');
 const bcrypt = require("bcrypt");
 const validate = require('../utils/validate')
+const cloudinary = require('cloudinary').v2
+cloudinary.config({
+    cloud_name:process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+
+})
+
 module.exports = {
 
     generateQRCode: async(req,res)=>{
@@ -35,6 +44,7 @@ module.exports = {
             res.status(500)
             res.send("SOMETHING BAD HAPPENED");
         }
+        
     },
     fetchLogs: async(req,res)=>{
         const date = moment("2014/12/08").format("MMM Do YY").valueOf()
@@ -106,7 +116,8 @@ module.exports = {
         city:value.city,
         fullAddress:value.fullAddress,
         qrCode:value.qrCode,
-        role:value.role
+        role:value.role,
+        profilePicture:value.profilePicture
     } 
      
        req.session.user = user;
@@ -135,7 +146,8 @@ module.exports = {
             city:value.city,
             fullAddress:value.fullAddress,
             qrCode:value.qrCode,
-            role:value.role
+            role:value.role,
+            profilePicture:value.profilePicture
         } 
          
         req.session.user = user;
@@ -175,5 +187,51 @@ module.exports = {
         
     
     
+    },
+    createProfilePicture:async(req,res)=>{
+
+        console.log(req.file);
+        try{
+            const imageFile = req.file;
+            const userId = req.params.id;
+            const uploadResult = await cloudinary.uploader.upload(`./uploads/${imageFile.originalname}`,{
+                folder:"profile-pictures",
+                public_id:`${Date.now()}${imageFile.originalname}`
+
+            })
+            console.log("UPLOADED")
+            const profilePicture = {
+                profilePicture:{
+                id:uploadResult.public_id,
+                name:uploadResult.original_filename+"."+uploadResult.format,
+                url:uploadResult.secure_url
+            }
+            }
+            const database = await dbUtils.connectToDB();
+            const {value} =  await database.collection('users').findOneAndUpdate({_id:ObjectId(userId)},{$set:profilePicture})
+           console.log("DATABASE LOADED")
+           if('id' in value.profilePicture){ // delete last profile pic in cloudinary if there is any
+               const deleteResult  = await cloudinary.uploader.destroy(value.profilePicture.id);
+               console.log(deleteResult);
+           }
+         
+            user = {
+            id: value._id,
+            name: value.fullname,
+            email:value.email,
+            mobileNumber:value.mobileNumber,
+            province:value.province,
+            city:value.city,
+            fullAddress:value.fullAddress,
+            qrCode:value.qrCode,
+            role:value.role,
+            profilePicture:profilePicture.profilePicture,
+        } 
+        req.session.user = user;
+        res.send("OK")
+        }catch(error){
+            console.log(error)
+            res.send("BAD")
+        }
     }
 }

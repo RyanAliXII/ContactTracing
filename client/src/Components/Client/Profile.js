@@ -6,6 +6,7 @@ import { UserContext } from '../../Contexts/UserContext'
 import { AuthContext } from '../../Contexts/AuthContext'
 import axios from 'axios'
 import {ProfileNavStateContext} from '../../Contexts/ProfileNavState'
+import DefaultProfile from '../../Assets/images/user.svg'
 import cors from '../../cors'
 
 function showValid(inputs, messageTextRef) {
@@ -39,7 +40,7 @@ function showInvalid(inputs, messageTextRef) {
     }
     messageTextRef.current.style.display = INVALID.DISPLAY // DISPLAY ERROR MESSAGE
 }
-function Profile() {
+function Profile({setLoadingClass}) {
 
     const [user, setUser] = useContext(UserContext)
     const [session, fetchSession] = useContext(AuthContext)
@@ -47,6 +48,38 @@ function Profile() {
     const [mobileInfoModal, setMobileInfoModal] = useState("hide max profile-modal modal-height")
     const [passwordInfoModal, setPasswordInfoModal] = useState("hide max profile-modal modal-height")
     const [profileNavState,setProfileNavState] = useContext(ProfileNavStateContext)
+    const fileInputForm = useRef();
+
+
+
+   async function fileInputListener(event){
+      
+     try{   
+            setLoadingClass('loading-wrapper')
+            let formData = new FormData();
+            formData.append("profile",event.target.files[0]);
+            if(event.target.files[0] != null || event.target.files != undefined){
+                console.log("UPLOADING");
+               const {data} = await axios.put(`${cors.domain}/client/profile/${user.id}`,formData,{    
+                    headers:{
+                        'content-type':'multipart/form-data'
+                    },
+                    withCredentials:true
+                },);
+                if(data === "OK"){
+                    fetchSession(prevState => prevState + 1);
+                }
+             
+            }
+        }
+            catch (error) {
+                console.log(error)
+            }
+            finally{
+                setLoadingClass('hide')
+            }
+              
+    }
 
     if(!profileNavState){
         return <Redirect to="/dashboard"></Redirect>
@@ -54,31 +87,51 @@ function Profile() {
     return (
         JSON.parse(localStorage.getItem('auth')).bool && JSON.parse(localStorage.getItem('auth')).role === "Client" ? (
         <div className="profile-wrapper">
-
+         
             <div className="travel-logs profile">
                 <div className="title-wrapper">
                     <span className="title-text">Profile</span>
+
                     <span className="back-btn blue-clr" onClick={()=>{setProfileNavState(false)}}><IoArrowBackCircleSharp></IoArrowBackCircleSharp></span>
                 </div>
                 <div className="user-details">
-                    <div className="general-info bg1">
+
+                    
+                <div className="profile-picture">
+
+                    <div className="profile-area">
+                        <ProfilePicture user={user}></ProfilePicture>
+                    </div>
+                    <div className="upload-profile-picture">
+                        <form ref={fileInputForm} encType="multipart/form-data" method="PUT">
+                            <input type="file" id="profile-upload" name="profile" accept="image/png,image/jpeg" className="hide"  onChange={fileInputListener}>
+                            </input>
+                            <label htmlFor="profile-upload" className="profile-area-label">Update picture</label>
+                        </form>
+                    </div>
+                    <div className="profile-area-name">
+                        <span>{user.name}</span>
+                    </div>
+                
+                </div>
+                    <div className="general-info ex-bg">
                         <div>
                             <label>General</label>
-                            <span>{user.name}</span>
+                            <span className="big-text">{user.name}</span>
                             <div>
-                                <span className="inline">{user.province + ", "}</span>
-                                <span className="inline">{user.city}</span>
+                                <span className="inline smol-text">{user.province + ", "}</span>
+                                <span className="inline smol-text">{user.city}</span>
                             </div>
-                            <span>{user.fullAddress}</span>
+                            <span className="inline smol-text">{user.fullAddress}</span>
                         </div>
                         <div className="edit-wrapper">
                             <span className="inline " onClick={() => { setGeneralInfoModal('show max profile-modal') }}><BiEdit></BiEdit></span>
                         </div>
                     </div>
-                    <div className="important-info bg1">
+                    <div className="important-info ex-bg">
                         <div className="info-wrapper">
                             <label>Mobile #</label>
-                            <span className="important">
+                            <span className="important big-text">
                                 {user.mobileNumber}
                             </span>
                         </div>
@@ -88,10 +141,10 @@ function Profile() {
                             }}><BiEdit></BiEdit></span>
                         </div>
                     </div>
-                    <div className="important-info bg1">
+                    <div className="important-info ex-bg">
                         <div className="info-wrapper">
                             <label>Password</label>
-                            <span className="important">
+                            <span className="important big-text">
                                 Change Password
                             </span>
                         </div>
@@ -511,4 +564,16 @@ function PasswordModal({ Class, setPasswordInfoModal, user }) {
         </div>
     )
 }
+
+function ProfilePicture({user}){
+    if('id' in user.profilePicture){
+       return  <img alt="profile-picture" src={user.profilePicture.url}></img>
+    }
+   else{
+    return  <img alt="profile-picture" src={DefaultProfile}></img>
+   }
+
+
+}
+
 export default Profile;

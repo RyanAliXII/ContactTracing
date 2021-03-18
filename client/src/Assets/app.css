@@ -26,6 +26,9 @@ body{
 .yl-bg{
     background:#F1C517
 }
+.ex-bg{
+    background:#fcf9f9;
+}
 .warn-bg{
     background-color:#e65353
 }
@@ -44,7 +47,14 @@ body{
 .hide{
     display:none !important;
 }
-
+.smol-text{
+    font-size:0.9rem !important;
+    font-weight: 300;
+}
+.big-text{
+    font-size:1.2rem !important;
+  
+}
 
 .default-bg{
     background:#FFFFFF;

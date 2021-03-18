@@ -303,9 +303,34 @@ overflow-y: scroll;
     height:100vh;
     margin: auto;
 }
+.profile-picture{
+    width:100%;
+    height:40vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+}
+.profile-picture{
+    margin-bottom: 1.2rem;
+}
+.profile-area img{
+    clip-path: circle(40%);
+    width: 15rem;
+    
+}
+.profile-area-label{
+    cursor:pointer;
+    text-decoration: underline;
+    font-size: 1.2rem !important;
+}
+.profile-area-name span{
+    font-size:2.5rem
+}
 .user-details{
     width:95%;
     margin: auto;
+    
 }
 .fixed-pos{
     top:10vh;

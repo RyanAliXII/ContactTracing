@@ -17,8 +17,8 @@ const path = require('path')
 
 
 app.use(cookieParser())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended:true}))
+app.use(bodyParser.json());
 app.use(cors(corsConfig));
 app.use(express.static(path.join(__dirname,'client/build')))
 

@@ -47,6 +47,10 @@ module.exports = {
         } catch (error) {
             console.log(error);
             res.status(500);
+            res.send("Something bad happened")
+        }
+        finally {
+            await dbUtils.getClient().close();
         }
     },
     createRoom: async (req, res) => {
@@ -69,7 +73,7 @@ module.exports = {
             res.json(dbResult);
 
         } catch (error) {
-            
+            res.status(500);
             res.send("ERROR: SOMETHING BAD HAPPENED")
 
         }

@@ -15,7 +15,7 @@ module.exports = {
     signUp: async (req, res) => {
         try {
             const user = req.body;
-            Object.assign(user, { qrCode: uuidV4(),role:"Client",travel_logs:[]});
+            Object.assign(user, { qrCode: uuidV4(),role:"Client",travel_logs:[],profilePicture:{}});
             user.password = await bcrypt.hash(user.password, 10);
             const database = await dbUtils.connectToDB();
             database.collection("users").insertOne(user);
@@ -24,6 +24,7 @@ module.exports = {
             console.log(error)
              res.send("ERROR: SOMETHING BAD HAPPENED");
         } 
+   
     },
     signIn: async (req, res) => {
         const username  = req.body.username;
@@ -33,18 +34,19 @@ module.exports = {
         }
         else{
             query = { mobileNumber:username}
+     
         }
         const password = req.body.password;
-
+        const database = await dbUtils.connectToDB();
         try {
-            const database = await dbUtils.connectToDB();
+     
             const databaseResult = await database
                 .collection("users")
                 .findOne(query);
-
             if (databaseResult == null) {
                 res.send("Invalid Email");
             } else {
+              
                 const isPasswordTheSame = await bcrypt.compare(
                     password,
                     databaseResult.password
@@ -58,7 +60,8 @@ module.exports = {
                         city:databaseResult.city,
                         fullAddress:databaseResult.fullAddress,
                         qrCode:databaseResult.qrCode,
-                        role:databaseResult.role
+                        role:databaseResult.role,
+                        profilePicture: databaseResult.profilePicture ?? {}
                     }    
             
                 if (isPasswordTheSame) {
@@ -75,7 +78,10 @@ module.exports = {
         } catch (error) {
             console.log(error);
             res.status(500);
+            res.send("SOMETHING BAD HAPPENED")
         }
+      
+    
     },
 
     verify: async (req, res) => {
