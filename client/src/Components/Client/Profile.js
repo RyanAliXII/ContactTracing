@@ -59,7 +59,7 @@ function Profile({setLoadingClass}) {
             let formData = new FormData();
             formData.append("profile",event.target.files[0]);
             if(event.target.files[0] != null || event.target.files != undefined){
-                console.log("UPLOADING");
+            
                const {data} = await axios.put(`${cors.domain}/client/profile/${user.id}`,formData,{    
                     headers:{
                         'content-type':'multipart/form-data'
