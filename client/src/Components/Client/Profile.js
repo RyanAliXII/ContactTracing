@@ -50,8 +50,6 @@ function Profile({setLoadingClass}) {
     const [profileNavState,setProfileNavState] = useContext(ProfileNavStateContext)
     const fileInputForm = useRef();
 
-
-
    async function fileInputListener(event){
       
      try{   
