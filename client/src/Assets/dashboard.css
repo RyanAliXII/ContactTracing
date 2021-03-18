@@ -317,6 +317,7 @@ overflow-y: scroll;
 .profile-area img{
     clip-path: circle(40%);
     width: 15rem;
+    max-height: 182px;
     
 }
 .profile-area-label{
