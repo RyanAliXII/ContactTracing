@@ -6,6 +6,7 @@ const moment = require('moment');
 const bcrypt = require("bcrypt");
 const validate = require('../utils/validate')
 const cloudinary = require('cloudinary').v2
+const fs = require('fs')
 cloudinary.config({
     cloud_name:process.env.CLOUDINARY_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -189,17 +190,23 @@ module.exports = {
     
     },
     createProfilePicture:async(req,res)=>{
+        const imageFile = req.file;
+        if(!validate.isImage(imageFile.mimetype))
+        {   
+            console.log("Unsupported image");
+            fs.unlinkSync(`./uploads/${imageFile.originalname}`);
+            return res.send("Unsupported image");
+        }
 
-        console.log(req.file);
         try{
-            const imageFile = req.file;
+      
             const userId = req.params.id;
             const uploadResult = await cloudinary.uploader.upload(`./uploads/${imageFile.originalname}`,{
                 folder:"profile-pictures",
                 public_id:`${Date.now()}${imageFile.originalname}`
 
             })
-            console.log("UPLOADED")
+      
             const profilePicture = {
                 profilePicture:{
                 id:uploadResult.public_id,
@@ -209,7 +216,7 @@ module.exports = {
             }
             const database = await dbUtils.connectToDB();
             const {value} =  await database.collection('users').findOneAndUpdate({_id:ObjectId(userId)},{$set:profilePicture})
-           console.log("DATABASE LOADED")
+
            if('id' in value.profilePicture){ // delete last profile pic in cloudinary if there is any
                const deleteResult  = await cloudinary.uploader.destroy(value.profilePicture.id);
                console.log(deleteResult);
@@ -229,9 +236,13 @@ module.exports = {
         } 
         req.session.user = user;
         res.send("OK")
-        }catch(error){
+        }
+        catch(error){
             console.log(error)
             res.send("BAD")
+        }
+        finally{
+            fs.unlinkSync(`./uploads/${imageFile.originalname}`);
         }
     }
 }

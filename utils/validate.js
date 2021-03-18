@@ -67,5 +67,17 @@ module.exports = {
         catch (error) {
             console.log(error)
         }
+    },
+    isImage:(fileExtension)=>{
+            const arrayOfAllowedFileExtensions = ['image/jpeg','image/png']
+            console.log(fileExtension)
+            
+            for(let i = 0; i < arrayOfAllowedFileExtensions.length; i++){
+                if(fileExtension === arrayOfAllowedFileExtensions[i]){
+                    return true;
+                }
+            }
+
+            return false;
     }
 }
